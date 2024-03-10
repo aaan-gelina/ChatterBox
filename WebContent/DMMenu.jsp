@@ -24,8 +24,9 @@
         max-height: 90vh;
      }
     .top_container{
-        position: relative;
-        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
     .back_button{
         background-color: #ccc;
@@ -35,16 +36,25 @@
         border-radius: 4px;
         cursor: pointer;
         height: fit-content;
-        position: absolute;
-        left: 0;
     }
     .back_button:hover {
         background-color: #b3b3b3;
     }
-   
     h1{
         text-align: center;
         margin: 0;
+    }
+    .add_button{
+        background-color: #ffb3ec;
+        color: #333;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: fit-content;
+    }
+    .add_button:hover {
+        background-color: #ff80df;
     }
     .chat_container{
     	font-family: Arial, sans-serif;
@@ -76,12 +86,13 @@
     <div class = "outside_container">
         <div class="top_container">
             <button class = back_button onclick="goBack()">Go Back</button>
-            <h1>Your DM Chats</h1>     
+            <h1>Your DM Chats</h1>
+            <button class = add_button onclick="addChat()">Add Chat</button>     
         </div>                  
         <div class = "list_container">                      <!--TODO(JSP): load available DM conversations into list-->          
             <ul id="conversations">
                 <li>
-                    <a href="./DMPage.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding! DM page on click-->
+                    <a href="./DMPage.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
                 </li>
                 <li>
                     <a href="./DMPage.jsp">Friend #2</a>     
@@ -89,14 +100,23 @@
                 <li>
                     <a href="./DMPage.jsp">Friend #3</a>     
                 </li>
+                <li>
+                    <button type="button" onclick="goChatPage('friendname')">Friend Name</button>
+                </li>
             </ul>
         </div>
     </div>
 
-</body>
+</body>                                                                 <!-- TODO: write "add chat" page -->
 <script>
     function goBack() {
         history.back();
+    }
+    function goChatPage(string){
+
+    }                               
+    function add_button(){                                  
+
     }
 </script>
 </html>
