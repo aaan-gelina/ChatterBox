@@ -86,9 +86,17 @@
     }
     main footer{
         height: 30px;
-
     }
-    
+    .send_message{
+        display: flex;
+    }
+    #usermessage{
+         width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 </style>
 </head>
 
@@ -96,7 +104,7 @@
 <div class = "outside_container">
     <div class="top_container">
         <button class = back_button onclick="goBack()">Go Back</button>
-	    <h1>Your friend's name</h1>     <!-- TODO(JSP): Get current chat name from database -->
+	    <h1>Your friend's name</h1>     <!-- TODO(JSP): Get current chat name from database or query -->
     </div>                  
 	<div class = "chat_container">                                  <!--TODO(JSP): Load chat messages into list-->
         <main>
@@ -155,9 +163,9 @@
             </ul>
         </main>
         <footer>
-            <form name="message" action="">
-                <input name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
-                <input name="submitmessage" type="submit" id="submitmessageg" value="Send" /> <!--TODO: send message functions etc.-->
+            <form class="send_message">
+                <input style="flex: 1;" name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
+                <button>Send</button> <!-- TODO(JSP): handle sending of message to database, updating chat-->
             </form>
         </footer>
 	</div>
