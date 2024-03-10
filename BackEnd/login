@@ -1,5 +1,8 @@
 public class login{
 
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+
 
     //todo, check password against user password in database
     //check, username agaisnt database for username

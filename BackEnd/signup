@@ -11,6 +11,31 @@ public class signup extends HttpServlet{
         String password = request.getParameter("password");
 
     
+    //todo method for button click for signup
+    
+    if(validateEmail(email)== true){
+        if(passValidate(password) ==true){
+            response.sendRedirect("home.jsp");
+        }
+        else if(password.length < 8) {
+            out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+            out.println("<p style='color:red;'>Password must be 8 or more characters long</p>");
+         }
+         else{
+            out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+            out.println("<p style='color:red;'>Invlaid Password. Must containt at least one uppercase, lowercase and special character</p>");
+         }
+    }else{
+        out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+        out.println("<p style='color:red;'> Invalid email format.</p>");
+    }
+    
+    //todo method to open login page when button is clicked 
+    
+
+    //send data to firebase after validate email/password
+    }
+    
     //regex email validation
     public static boolean validateEmail(final String email){
 
