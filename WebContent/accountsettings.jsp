@@ -5,9 +5,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            text-align: center;
+            background-color: #C5EBFE; 
         }
         .container {
             width: 50%;
@@ -19,7 +18,7 @@
             margin-top: 50px;
         }
         h1 {
-            color: #8907AD;
+            color: #333;
             font-size: 24px;
             text-align: center;
         }
@@ -129,6 +128,7 @@
     function confirmDeleteAccount() {
         if (confirm("Are you sure you want to delete your account permanently? This action cannot be undone.")) {
             // code to delete account permanently
+            // Once account is deleted the user should be sent back to login.jsp
         }
     }
     function goBack() {
