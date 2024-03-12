@@ -2,7 +2,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-public class signup extends HttpServlet{
+public class signup extends user, implements HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String firstName = request.getParameter("firstName");
@@ -10,12 +10,13 @@ public class signup extends HttpServlet{
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        user nU = new user(username, firstName, lastName, email, password);
     
     //todo method for button click for signup
     
     if(validateEmail(email)== true){
         if(passValidate(password) ==true){
-            response.sendRedirect("home.jsp");
+           response.sendRedirect("home.jsp");
         }
         else if(password.length < 8) {
             out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds

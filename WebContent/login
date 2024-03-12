@@ -1,4 +1,5 @@
-public class login{
+public class login extends HttpServlet{
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     String username = request.getParameter("username");
     String password = request.getParameter("password");
@@ -11,4 +12,4 @@ public class login{
     //loads to home.jsp
     //get text input from html/jsp file. 
     //add button to create account that leads to create account page
-}
+}}
