@@ -14,8 +14,9 @@ public class signup extends user, implements HttpServlet{
     
     //todo method for button click for signup
     
-    if(validateEmail(email)== true){
-        if(passValidate(password) ==true){
+    if(validateEmail(nU.getEmail())== true){
+        if(passValidate(nU.getPassword(password)) ==true){
+            //todo add code to send user data to database
            response.sendRedirect("home.jsp");
         }
         else if(password.length < 8) {
@@ -33,7 +34,7 @@ public class signup extends user, implements HttpServlet{
     
     //todo method to open login page when button is clicked 
     
-
+    
     //send data to firebase after validate email/password
     }
     
