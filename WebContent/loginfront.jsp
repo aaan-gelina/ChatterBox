@@ -27,7 +27,7 @@
 <input class="submit" type="submit" name="Submit2" value="Log In" style="font-weight:bold; font-size: 20px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; padding: 10px 150px; background-color:#8907AD; color: #ffffff; text-decoration: none; border-radius: 20px; border: 1px solid #8907AD; margin-top: 20px;">
 </form>
 <h4 align="center" style="font-weight:normal; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">New to ChatterBox?</h4>
-<h2 align="center"><a href="signup.html" style="font-weight:bold; font-size: 20px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; padding: 10px 145px; background-color:#8907AD; color: #ffffff; text-decoration: none; border-radius: 20px; border: 1px solid #8907AD;">Sign Up</a></h2>
+<h2 align="center"><a href="signupfront.jsp" style="font-weight:bold; font-size: 20px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; padding: 10px 145px; background-color:#8907AD; color: #ffffff; text-decoration: none; border-radius: 20px; border: 1px solid #8907AD;">Sign Up</a></h2>
 </div>
 
 </body>
