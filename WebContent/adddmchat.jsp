@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DM Menu</title>
+<title>Add Chat</title>
 <style type="text/css">
 	body {
        font-family: Arial, sans-serif;
@@ -24,9 +24,8 @@
         max-height: 90vh;
      }
     .top_container{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        position: relative;
+        text-align: center;
     }
     .back_button{
         background-color: #ccc;
@@ -36,6 +35,8 @@
         border-radius: 4px;
         cursor: pointer;
         height: fit-content;
+        position: absolute;
+        left: 0;
     }
     .back_button:hover {
         background-color: #b3b3b3;
@@ -43,18 +44,6 @@
     h1{
         text-align: center;
         margin: 0;
-    }
-    .add_button{
-        background-color: #ffb3ec;
-        color: #333;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        height: fit-content;
-    }
-    .add_button:hover {
-        background-color: #ff80df;
     }
     .chat_container{
     	font-family: Arial, sans-serif;
@@ -66,11 +55,11 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    #conversations {
+    #users {
         list-style-type:none;
         
     }
-    #conversations li{
+    #users li{
         font-family: Arial, sans-serif;
         padding:10px 30px;
         padding-left: 35px;
@@ -86,11 +75,10 @@
     <div class = "outside_container">
         <div class="top_container">
             <button class = back_button onclick="goBack()">Go Back</button>
-            <h1>Your DM Chats</h1>
-            <button class = add_button onclick="addChat()">Add Chat</button>     
+            <h1>Choose a User to Chat with:</h1>  
         </div>                  
-        <div class = "list_container">                      <!--TODO(JSP): load available DM conversations into list-->          
-            <ul id="conversations">
+        <div class = "list_container">                      <!--TODO(JSP): load available users (not already in a chat with me) into list-->          
+            <ul id="users">
                 <li>
                     <a href="./dmpage.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
                 </li>
@@ -101,22 +89,18 @@
                     <a href="./dmpage.jsp">Friend #3</a>     
                 </li>
                 <li>
-                    <button type="button" onclick="goChatPage('friendname')">Friend Name</button>  <!--Not sure if button or link would work better-->
+                    <button type="button" onclick="goChatPage('friendname')">Friend Name</button>
                 </li>
             </ul>
         </div>
     </div>
-
-</body>                                                                 
+</body>
 <script>
     function goBack() {
         history.back();
     }
-    function goChatPage(string){
-        window.location = "./dmpage.jsp";               //TODO: send to "chat" page with correct user
+    function goChatPage(string){                    //TODO: send to chat page with correct user
+        window.location = "./dmpage.jsp";
     }                               
-    function add_button(){                                  
-        window.location = "./adddmchat.jsp";
-    }
 </script>
 </html>
