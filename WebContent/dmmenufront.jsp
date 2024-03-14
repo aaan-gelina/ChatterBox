@@ -92,13 +92,13 @@
         <div class = "list_container">                      <!--TODO(JSP): load available DM conversations into list-->          
             <ul id="conversations">
                 <li>
-                    <a href="./dmpage.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
+                    <a href="./dmpagefront.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
                 </li>
                 <li>
-                    <a href="./dmpage.jsp">Friend #2</a>     
+                    <a href="./dmpagefront.jsp">Friend #2</a>     
                 </li>
                 <li>
-                    <a href="./dmpage.jsp">Friend #3</a>     
+                    <a href="./dmpagefront.jsp">Friend #3</a>     
                 </li>
                 <li>
                     <button type="button" onclick="goChatPage('friendname')">Friend Name</button>  <!--Not sure if button or link would work better-->
@@ -113,10 +113,10 @@
         history.back();
     }
     function goChatPage(string){
-        window.location = "./dmpage.jsp";               //TODO: send to "chat" page with correct user
+        window.location = "./dmpagefront.jsp";               //TODO: send to "chat" page with correct user
     }                               
     function add_button(){                                  
-        window.location = "./adddmchat.jsp";
+        window.location = "./adddmchatfront.jsp";
     }
 </script>
 </html>
