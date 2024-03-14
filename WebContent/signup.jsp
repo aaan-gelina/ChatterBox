@@ -1,8 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <%
+
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-public class signup extends user, implements HttpServlet{
+public class signup extends user, HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String firstName = request.getParameter("firstName");
@@ -16,7 +20,7 @@ public class signup extends user, implements HttpServlet{
     
     if(validateEmail(nU.getEmail())== true){
         if(passValidate(nU.getPassword(password)) ==true){
-            //todo add code to send user data to database
+            sendData(nU);
            response.sendRedirect("home.jsp");
         }
         else if(password.length < 8) {
@@ -31,10 +35,8 @@ public class signup extends user, implements HttpServlet{
         out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
         out.println("<p style='color:red;'> Invalid email format.</p>");
     }
-    
-    //todo method to open login page when button is clicked 
-    
-    
+        
+
     //send data to firebase after validate email/password
     }
     
@@ -62,7 +64,11 @@ public class signup extends user, implements HttpServlet{
         return matcher.matches();
     }
 
-
+    private static sendData(user u){
+        //todo write code to send user info to database
+    }
 
 
 }
+%>
+    </html>
