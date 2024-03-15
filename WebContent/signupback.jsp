@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
-    <%
-
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+<%@ page file="firebaseconnection.jsp" %>
+<%@ page import="com.google.firebase.database.DataSnapshot" %>
+<%@ page import="com.google.firebase.database.DatabaseReference" %>
+<%@ page import="com.google.firebase.database.FirebaseDatabase" %>
+<%@ page import="com.google.firebase.database.DatabaseError" %>
+<%@ page import="com.google.firebase.database.ValueEventListener" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="javax.servlet.*"%>
+<%@ page import="javax.servlet.http.*"%>
+<%
 
 public class signup extends user, HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -16,12 +23,17 @@ public class signup extends user, HttpServlet{
 
         user nU = new user(username, firstName, lastName, email, password);
     
-    //todo method for button click for signup
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("User");
+
+   
+
+
     
     if(validateEmail(nU.getEmail())== true){
         if(passValidate(nU.getPassword(password)) ==true){
             sendData(nU);
-           response.sendRedirect("home.jsp");
+            response.sendRedirect("home.jsp");
         }
         else if(password.length < 8) {
             out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
@@ -65,7 +77,10 @@ public class signup extends user, HttpServlet{
     }
 
     private static sendData(user u){
-        //todo write code to send user info to database
+        DatabaseReference userRef = ref.child("User");
+        Map<int, user> users = new HashMap<>();
+        users.put(u.userID, u);
+        userRef.setValueAsync(users);
     }
 
 

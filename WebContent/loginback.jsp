@@ -12,20 +12,29 @@
 <%
 
 
-        public class login extends HttpServlet{
+        public class login extends User, HttpServlet{
             public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
                 //get input password and username
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
 
+                //database connection    
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference ref = database.getReference("User");
+
+                ref.addValueEventListener(new ValueEventListener(){
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot){
+                        User user = dataSnapshot.getValue(User.class);
+                        System.out.println(user);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError dbError){
+                        System.out.println('The read failed: ' + dbError.getCode());
+                    }
+                });
         
-
-        //database connection    
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("User");
-
-        DatabaseReference userRef = ref.child(username);
         
 
         if(username == userRef){

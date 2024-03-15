@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <%
-    public class user{
+    public class User{
 
         private static long count = 0;
         private long userID;
