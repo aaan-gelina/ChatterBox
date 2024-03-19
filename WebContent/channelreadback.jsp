@@ -71,13 +71,15 @@ public ArrayList<Pair> getThreadArray(cid) {
                 end = i - 1;
 
                 // Add uid and message to arraylist
-                messages.add(uid, thread[start:end]);
+                messages.add(new Pair<String, Integer>(uid, thread[start:end]));
                 start = i + 1;
                 uid = null;
                 count += 1;
             }
         }
     }
+
+    // Return Arraylist of messages
     return messages;
 }
 %>
