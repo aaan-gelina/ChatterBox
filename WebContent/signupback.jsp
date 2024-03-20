@@ -11,9 +11,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="javax.servlet.*"%>
 <%@ page import="javax.servlet.http.*"%>
+<%@ page import="java.util.regex.Matcher"%>
+<%@ page import="java.util.regex.Pattern"%>
 <%
 
-public class signup extends user, HttpServlet{
+public class signup extends User, HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String firstName = request.getParameter("firstName");
@@ -21,7 +23,7 @@ public class signup extends user, HttpServlet{
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        user nU = new user(username, firstName, lastName, email, password);
+        User nU = new User(username, firstName, lastName, email, password);
     
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("User");
