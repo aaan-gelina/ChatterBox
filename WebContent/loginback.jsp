@@ -26,8 +26,8 @@
                 ref.addValueEventListener(new ValueEventListener(){
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot){
-                        User user = dataSnapshot.getValue(User.class);
-                        System.out.println(user);
+                        User u = dataSnapshot.getValue(User.class);
+                        System.out.println(u);
                     }
                     @Override
                     public void onCancelled(DatabaseError dbError){
@@ -37,8 +37,8 @@
         
         
 
-        if(username == userRef){
-            if(password == passRef){
+        if(username == u.getUName){
+            if(password == u.getPassword){
                 response.sendRedirect("home.jsp");
             }else{
                 out.println("<meta http-equiv='refresh' content='3;URL=login.jsp'>");//redirects after 3 seconds

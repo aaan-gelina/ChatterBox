@@ -12,7 +12,7 @@
 <div align="center" margin="0 auto" style="position: absolute; top: 10%; left: 37.5%; margin-top: -50px; margin-left: -50px; width: 500px; height: 660px; border: 1px solid #a9a2a2; background-color: #ffffff;">
 <h1 align="center">ChatterBox</h1>
 <br>
-<form name="MyForm" method=post action="validateLogin.jsp">
+<form name="MyForm" method=post action="loginback.jsp">
 <table style="display:inline">
 <tr>
 	<td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Username:</font></div></td>
