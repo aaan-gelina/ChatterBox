@@ -77,7 +77,7 @@ public ArrayList<Pair> getThreadArray(uid) {
                 end = i - 1;
 
                 // Add userID and message to arraylist
-                messages.add(userId, thread[start:end]);
+                messages.add(new Pair<Integer, String>(userId, thread[start:end]));
                 start = i + 1;
                 userId = null;
                 count += 1;
@@ -109,7 +109,7 @@ public void writeMessage(cid, uid, message) {     //TODO: ADJUST TO DM SYSTEM (t
     DatabaseReference currentChannel = root.child("Channels").child(cid);
 
     //Set Messages value in database to update thread
-    currentChannel.child(messages).setValue(thread);
+    currentChannel.child("messages").setValue(thread);
 }
 
 %>
