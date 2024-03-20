@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="dmmenuback.jsp" %>             
+<%@ include file="dmpageback.jsp" %>            
+<%@ page import="java.util.Map" %>
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,17 +109,23 @@
 <body>
 <div class = "outside_container">
     <div class="top_container">
+        <%! int otherUser = Integer.parseInt(request.getParameter("uid"));%>          <!-- get uid of other user from url query-->
         <button class = back_button onclick="goBack()">Go Back</button>
-	    <h1>Your friend's name</h1>     <!-- TODO(JSP): Get current chat name from database or query -->
+	    <h1><%= getUsername(otherUser)%></h1>                       <!--display username of conversation partner-->
     </div>                  
-	<div class = "chat_container">                                  <!--TODO(JSP): Load chat messages into list-->
+	<div class = "chat_container">                              
         <main>
             <ul id="chat">
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
+                <%! ArrayList<Pair> messages = getThreadArray(otherUser);%>
+                <% for(Pair i: messages) { %>
+                    <li class=<%= (i.getKey()==otherUser) ? "friend" : "you" %>>    <!-- determine if sender is you or friend-->
+                        <div class="message">
+                            <%= i.getValue()%>
+                        </div>
+                    </li>
+                <% } %>
+
+                
                 <li class="friend">
                     <div class="message">
                         Something your friend wrote
@@ -165,7 +177,7 @@
         <footer>
             <form class="send_message">
                 <input style="flex: 1;" name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
-                <button>Send</button> <!-- TODO(JSP): handle sending of message to database, updating chat-->
+                <button>Send</button>       <!-- TODO: handle sending of message to database, updating chat-->
             </form>
         </footer>
 	</div>
