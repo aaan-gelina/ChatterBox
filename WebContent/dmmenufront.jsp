@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="dmmenuback.jsp" %>          
+<%@ page import="java.util.Map" %>
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,20 +94,14 @@
             <h1>Your DM Chats</h1>
             <button class = add_button onclick="addChat()">Add Chat</button>     
         </div>                  
-        <div class = "list_container">                      <!--TODO(JSP): load available DM conversations into list-->          
+        <div class = "list_container">                          
             <ul id="conversations">
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
-                </li>
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #2</a>     
-                </li>
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #3</a>     
-                </li>
-                <li>
-                    <button type="button" onclick="goChatPage('friendname')">Friend Name</button>  <!--Not sure if button or link would work better-->
-                </li>
+                <%! ArrayList<Integer> users = getDMPartners(uid);%>        <!-- TODO: obtain userID for current user-->
+                <% for(Integer i: users) { %>
+                    <li>
+                        <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>
+                    </li>
+                <% } %>
             </ul>
         </div>
     </div>
@@ -111,11 +110,8 @@
 <script>
     function goBack() {
         history.back();
-    }
-    function goChatPage(string){
-        window.location = "./dmpagefront.jsp";               //TODO: send to "chat" page with correct user
-    }                               
-    function add_button(){                                  
+    }                            
+    function addChat(){                                  
         window.location = "./adddmchatfront.jsp";
     }
 </script>

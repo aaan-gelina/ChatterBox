@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="dmmenuback.jsp" %>
+<%@ include file="adddmchatback.jsp" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,20 +82,14 @@
             <button class = back_button onclick="goBack()">Go Back</button>
             <h1>Choose a User to Chat with:</h1>  
         </div>                  
-        <div class = "list_container">                      <!--TODO(JSP): load available users (not already in a chat with me) into list-->          
+        <div class = "list_container">                      <!--load available users (not already in a chat with me) into list-->          
             <ul id="users">
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #1</a>     <!--TODO(JSP): link to corresponding DM page on click-->
-                </li>
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #2</a>     
-                </li>
-                <li>
-                    <a href="./dmpagefront.jsp">Friend #3</a>     
-                </li>
-                <li>
-                    <button type="button" onclick="goChatPage('friendname')">Friend Name</button>
-                </li>
+               <%! ArrayList<Integer> users = getPotPartners(uid);%>        <!-- TODO: obtain userID for current user-->
+                <% for(Integer i: users) { %>
+                    <li>
+                        <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a> <!-- handle creation of new DM chat -->
+                    </li>
+                <% } %>
             </ul>
         </div>
     </div>
@@ -98,9 +97,6 @@
 <script>
     function goBack() {
         history.back();
-    }
-    function goChatPage(string){                    //TODO: send to chat page with correct user
-        window.location = "./dmpagefront.jsp";
-    }                               
+    }                             
 </script>
 </html>
