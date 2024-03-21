@@ -13,15 +13,19 @@
 <h1 align="center">ChatterBox</h1>
 <h4 align="center" style="font-weight:normal; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">Sign up to start chatting!</h4>
 <br>
-<form name="MyForm" method=post action="validateLogin.jsp">
+<form name="MyForm" method=post action="signupback.jsp">
 <table style="display:inline">
     <tr>
         <td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Email:</font></div></td>
         <td><input type="email" name="email" size=30 maxlength="200" style="padding:10px; border: 1px solid #a9a2a2;"></td>
     </tr>
     <tr>
-        <td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Nickname:</font></div></td>
-        <td><input type="text" name="nickname" size=30 maxlength="30" style="padding:10px; border: 1px solid #a9a2a2;"></td>
+        <td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">First Name:</font></div></td>
+        <td><input type="text" name="firstName" size=30 maxlength="30" style="padding:10px; border: 1px solid #a9a2a2;"></td>
+    </tr>
+    <tr>
+        <td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Last Name:</font></div></td>
+        <td><input type="text" name="lastName" size=30 maxlength="30" style="padding:10px; border: 1px solid #a9a2a2;"></td>
     </tr>
     <tr>
 	    <td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Username:</font></div></td>
