@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%@ page file="firebaseconnection.jsp" %>
+<%@ include file="firebaseconnection.jsp" %>
 <%@ page import="com.google.firebase.database.DataSnapshot" %>
 <%@ page import="com.google.firebase.database.DatabaseReference" %>
 <%@ page import="com.google.firebase.database.FirebaseDatabase" %>
