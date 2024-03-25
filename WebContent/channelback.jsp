@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html>
 <%@ page file="firebaseconnection.jsp" %>
-<%@ page import="com.google.firebase.database.DataSnapshot" %>
-<%@ page import="com.google.firebase.database.DatabaseReference" %>
-<%@ page import="com.google.firebase.database.FirebaseDatabase" %>
-<%@ page import="com.google.firebase.database.DatabaseError" %>
-<%@ page import="com.google.firebase.database.ValueEventListener" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%
@@ -31,12 +25,8 @@ public class Channel() {
         this.admins = "`" + admin.toString();
         this.users = "`" + admin.toString();
 
-        // Connect to Firebase
-        connectdb();
-
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Connect to firebase
+        DatabaseReference currentChannel = Chatterbase.createRef("Channels", cid);
 
         // Add channel to database and update values
         currentChannel.child("name").setValue(name);
@@ -49,120 +39,70 @@ public class Channel() {
         /* Function returns name of channel from database
         */
 
-        // Connect to Firebase
-        connectdb();
-
-        // Create database reference
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Channels");
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
 
         // Read name from the channel
-        channelRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.getValue(String.class);
-                return name;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                System.out.println("Error reading messages: " + databaseError.getMessage());
-            }
-        });
+        return Chatterbase.readStr(channelRef, "name");
     }
 
     public String getDesc(cid) {
         /* Function returns desc of channel from database
         */
 
-        // Connect to Firebase
-        connectdb();
-
-        // Create database reference
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Channels");
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
 
-        // Read description from the channel
-        channelRef.child("desc").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String desc = dataSnapshot.getValue(String.class);
-                return desc;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                System.out.println("Error reading messages: " + databaseError.getMessage());
-            }
-        });
+        // Read desc from the channel
+        return Chatterbase.readStr(channelRef, "desc");
     }
 
     public String getAdmins(cid) {
         /* Function returns admins of channel from database
         */
 
-        // Connect to Firebase
-        connectdb();
-
-        // Create database reference
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Channels");
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
 
         // Read admins from the channel
-        channelRef.child("admins").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String admins = dataSnapshot.getValue(String.class);
-                return admins;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                System.out.println("Error reading messages: " + databaseError.getMessage());
-            }
-        });
+        return Chatterbase.readStr(channelRef, "admins");
     }
 
     public String getUsers(cid) {
         /* Function returns users of channel from database
         */
 
-        // Connect to Firebase
-        connectdb();
-
-        // Create database reference
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Channels");
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
 
         // Read users from the channel
-        channelRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String users = dataSnapshot.getValue(String.class);
-                return users;
-            }
+        return Chatterbase.readStr(channelRef, "users");
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                System.out.println("Error reading messages: " + databaseError.getMessage());
-            }
-        });
+    public String getMessages(cid) {
+        /* Function returns a string containing the current thread of messages sent within the channel 
+        */
+
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
+
+        // Read messages from the channel
+        return Chatterbase.readStr(channelRef, "messages");
     }
 
     public ArrayList<Integer> getAdminArray(cid) {
@@ -187,34 +127,128 @@ public class Channel() {
         return users;
     }
 
+    public ArrayList<Pair> getMessageArray(cid) {
+        /* Function returns an ArrayList of tuples containing the current thread of messages sent within the channel and the uid for 
+        * the sender of each message
+        */
+
+        // Initialize variables
+        int start = 1;
+        int end;
+        int count = 1;
+        int uid = null;
+        ArrayList<Pair> messageArray = new ArrayList();
+        
+        // Get messages from database
+        String messages = getMessages(cid);
+
+        // Parse messages to break into uids and messages at deliminator
+        for (int i = 1; i < messages.length(); i++) {
+            if (count % 2 == 1) {
+                if (messages.charAt(i) == '`') {
+                    end = i - 1;
+                    
+                    //Store uid to add to tuple arraylist
+                    uid  = Integer.parseInt(messages[start:end]);
+                    start = i + 1;
+                    count += 1;
+                }
+            }
+            else {
+                if (messages.charAt(i) == '`') {
+                    end = i - 1;
+
+                    // Add uid and message to arraylist
+                    messageArray.add(new Pair<String, Integer>(uid, messages[start:end]));
+                    start = i + 1;
+                    uid = null;
+                    count += 1;
+                }
+            }
+        }
+
+        // Return Arraylist of messages
+        return messageArray;
+    }
+
     public void setName(cid, name) {
         /* Function updates channel name in database
         */
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set name value in database
-        currentChannel.child("name").setValue(name);
+        channelRef.child("name").setValue(name);
     }
 
     public void setDesc(cid, desc) {
         /* Function updates channel description in database
         */
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set description value in database
-        currentChannel.child("desc").setValue(desc);
+        channelRef.child("desc").setValue(desc);
+    }
+
+    public void addMessage(cid, uid, message) {
+        /* Function adds a new message to the channel log
+        */
+
+        // Initialize variables
+        String newMessage = "`" + uid.toString() + "`" message;
+        String thread;
+
+        // Get previous message thread from database
+        String messages = getMesages(cid);
+
+        // Add new message to thread
+        messages = messages.append(newMessage);
+
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
+
+        // Set messages value in database
+        channelRef.child("messages").setValue(messages);
+    }
+
+    public void removeMessage(cid, uid, message) {
+        /* Function removes a message from the chat log in the Firebase Database 
+        */
+
+        // Initialize variables
+        ArrayList<Pair> messages = new ArrayList();
+        String newMessages;
+        Pair<Integer, String> deletedMessage = new Pair<Integer, String>(uid, message);
+
+        // Get previous message thread from database
+        messages = getMessageArray(cid);
+
+        // Remove message by value of uid and message
+        messages.remove(deletedmessage);
+
+        // Convert array without message to String
+        newMessages = messageString(messages);
+
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
+
+        // Set Messages value in database to update thread
+        channelRef.child("messages").setValue(newMessages);
     }
 
     public void addUser(cid, uid) {
@@ -227,15 +261,14 @@ public class Channel() {
         // Add user to user list
         users.append("`" + uid.toString());
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set users value in database to update thread
-        currentChannel.child("users").setValue(users);
+        channelRef.child("users").setValue(users);
     }
 
     public void removeUser(cid, uid) {
@@ -251,15 +284,14 @@ public class Channel() {
         // Convert array to string to store in database
         String userdata = dataString(users);
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set users value in database to update thread
-        currentChannel.child("users").setValue(userdata);
+        channelRef.child("users").setValue(userdata);
     }
 
     public void addAdmin(cid, uid) {
@@ -272,15 +304,14 @@ public class Channel() {
         // Add user to user list
         admins.append("`" + uid.toString());
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set admins value in database to update thread
-        currentChannel.child("admins").setValue(admins);
+        channelRef.child("admins").setValue(admins);
     }
 
     public void removeAdmin(cid, uid) {
@@ -296,12 +327,11 @@ public class Channel() {
         // Convert array to string to store in database
         String admindata = dataString(admins);
 
-        // Connect to Firebase
-        connectdb();
+        // Connect to firebase
+        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
 
-        // Create database reference
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference currentChannel = root.child("Channels").child(cid);
+        // Find the channel using cid
+        DatabaseReference channelRef = ref.child(cid);
 
         // Set admins value in database to update thread
         currentChannel.child("admins").setValue(admindata);
@@ -369,7 +399,7 @@ public class Channel() {
     }
 
     public String dataString(data) {
-        /* Function converts ArrayList of Integers to a String, returns String
+        /* Function converts ArrayList to a String, returns String
         */
 
         // Initialize variables
@@ -377,11 +407,29 @@ public class Channel() {
 
         // Traverse ArrayList and store in a String with deliminator "`"
         for (int i = 0; i < data.size() - 1; i++) {
-            str.append("`" + data.get(i));
+            str.append("`" + data.get(i).toString());
         }
 
-        // Return String containing integers
+        // Return String 
         return str;
+    }
+
+    public String messageString(messageArray) {
+        /* Function converts ArrayList of messages to a String containing the current thread of messages sent within the channel,
+        * returns value string
+        */
+
+        // Initialize variables
+        ArrayList<Pair> messageArray = messageArray;
+        String messages = "";
+
+        // Traverse messages ArrayList and store (key, value) Pairs in a string with deliminator "`"
+        for (int i = 0; i < messageArray.size() - 1; i++) {
+            messages.append("`" + messageArray.get(i).getKey().toString() + "`" + messageArray.get(i).getValue().toString());
+        }
+
+        // Return String containing current thread of messages sent within channel
+        return messages;
     }
 }
 %>
