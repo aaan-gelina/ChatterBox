@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%@ page file="firebaseconnection.jsp" %>
+<%@ include file="firebaseconnection.jsp" %>
 <%@ page import="com.google.firebase.database.DataSnapshot" %>
 <%@ page import="com.google.firebase.database.DatabaseReference" %>
 <%@ page import="com.google.firebase.database.FirebaseDatabase" %>
@@ -11,9 +11,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="javax.servlet.*"%>
 <%@ page import="javax.servlet.http.*"%>
+<%@ page import="java.util.regex.Matcher"%>
+<%@ page import="java.util.regex.Pattern"%>
 <%
 
-public class signup extends user, HttpServlet{
+public class signup extends User, HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String firstName = request.getParameter("firstName");
@@ -21,35 +23,32 @@ public class signup extends user, HttpServlet{
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        user nU = new user(username, firstName, lastName, email, password);
+        User nU = new User(username, firstName, lastName, email, password);
     
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("User");
 
-   
-
-
-    
+       
     if(validateEmail(nU.getEmail())== true){
         if(passValidate(nU.getPassword(password)) ==true){
             sendData(nU);
             response.sendRedirect("home.jsp");
         }
         else if(password.length < 8) {
-            out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+            out.println("<meta http-equiv='refresh' content='3;URL=signupfront.jsp'>");//redirects after 3 seconds
             out.println("<p style='color:red;'>Password must be 8 or more characters long</p>");
          }
          else{
-            out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+            out.println("<meta http-equiv='refresh' content='3;URL=signupfront.jsp'>");//redirects after 3 seconds
             out.println("<p style='color:red;'>Invlaid Password. Must containt at least one uppercase, lowercase and special character</p>");
          }
     }else{
-        out.println("<meta http-equiv='refresh' content='3;URL=signup.jsp'>");//redirects after 3 seconds
+        out.println("<meta http-equiv='refresh' content='3;URL=signupfront.jsp'>");//redirects after 3 seconds
         out.println("<p style='color:red;'> Invalid email format.</p>");
     }
         
 
-    //send data to firebase after validate email/password
+    
     }
     
     //regex email validation
@@ -75,7 +74,7 @@ public class signup extends user, HttpServlet{
         matcher = pattern.matcher(password);
         return matcher.matches();
     }
-
+    //method to send data to firebase after validate email/password
     private static sendData(user u){
         DatabaseReference userRef = ref.child("User");
         Map<int, user> users = new HashMap<>();

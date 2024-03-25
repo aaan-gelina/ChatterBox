@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%@ page file="firebaseconnection.jsp" %>
+<%@ include file="firebaseconnection.jsp" %>
 <%@ page import="com.google.firebase.database.DataSnapshot" %>
 <%@ page import="com.google.firebase.database.DatabaseReference" %>
 <%@ page import="com.google.firebase.database.FirebaseDatabase" %>
@@ -12,44 +12,44 @@
 <%
 
 
-        public class login extends User, HttpServlet{
-            public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public class login extends HttpServlet{
+        public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
                 //get input password and username
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
 
-                //database connection    
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference("User");
+        if(getUserPassword(username) == password){
+            response.sendRedirect("home.jsp");  
+        } else{
+                out.println("<meta http-equiv='refresh' content='3;URL=loginfront.jsp'>");//redirects after 3 seconds
+                out.println("<p style='color:red;'>Incorrect Password</p>")
+        }              
+        }
+    }
+    public String getUserPassword(username){
 
-                ref.addValueEventListener(new ValueEventListener(){
-                    @Override
+        //connect to firebase
+        connectdb();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("User");
+
+        DatabaseReference userRef = ref.child(username);
+
+        userRef.child("password").addListenerForSingleValueEvent{new ValueEventListener(){
+            @Override
                     public void onDataChange(DataSnapshot dataSnapshot){
-                        User user = dataSnapshot.getValue(User.class);
-                        System.out.println(user);
+                        String password = dataSnapshot.getValue(String.class);
+                        return password;
+                        
                     }
                     @Override
                     public void onCancelled(DatabaseError dbError){
-                        System.out.println('The read failed: ' + dbError.getCode());
+                        System.out.println('Username Error: ' + dbError.getCode());
                     }
-                });
-        
-        
 
-        if(username == userRef){
-            if(password == passRef){
-                response.sendRedirect("home.jsp");
-            }else{
-                out.println("<meta http-equiv='refresh' content='3;URL=login.jsp'>");//redirects after 3 seconds
-                out.println("<p style='color:red;'>Incorrect Password</p>")
-            }
-
-        }
-
-
-           
-        }
+        }}
     }
         %>
 </html>

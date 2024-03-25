@@ -21,9 +21,9 @@ public class Chatterbase() {
     /* Function connects to Firebase Database
     */
 
-        // TODO: change URL to correct file path when running...
-        try {
-            FileInputStream serviceAccount = new FileInputStream("C:\Users\adubr\COSC310\Project\ChatterBox\WebContent\chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
+    // TODO: change URL to correct file path when running...
+    try {
+        FileInputStream serviceAccount = new FileInputStream("C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\ChatterBox\WebContent\chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
