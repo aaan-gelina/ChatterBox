@@ -22,7 +22,7 @@
         if(getUserPassword(username) == password){
             response.sendRedirect("home.jsp");  
         } else{
-                out.println("<meta http-equiv='refresh' content='3;URL=login.jsp'>");//redirects after 3 seconds
+                out.println("<meta http-equiv='refresh' content='3;URL=loginfront.jsp'>");//redirects after 3 seconds
                 out.println("<p style='color:red;'>Incorrect Password</p>")
         }              
         }
