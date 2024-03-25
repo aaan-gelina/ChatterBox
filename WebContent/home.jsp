@@ -45,9 +45,9 @@
     </div>
 
     <!-- This is how to get a button to send you to another page. -->
-    <a href="dmmenu.jsp" id="dmmenu">DM Menu</a>
-    <a href="channels.jsp" id="channels">Channels</a>
+    <a href="dmmenufront.jsp" id="dmmenu">DM Menu</a>
+    <a href="channelfront.jsp" id="channels">Channels</a>
     <a href="accountsettings.jsp" id="accountsettings">Account Settings</a>
-    <a href="login.jsp" id="logout">Logout</a>
+    <a href="loginfront.jsp" id="logout">Logout</a>
 </body>
 </html>
