@@ -10,7 +10,7 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%
-public ArrayList<Integer> getDmPartners(uid){
+public ArrayList<Integer> getDmPartners(int uid){
     //function returns an array of userIds with which the current user has a DM conversation with
     
     // Connect to Firebase
@@ -46,7 +46,7 @@ public ArrayList<Integer> getDmPartners(uid){
     });
 }
 
-public String getUsername(uid){
+public String getUsername(int uid){
     //this functions returns the username connected to given userID
     
     // Connect to Firebase

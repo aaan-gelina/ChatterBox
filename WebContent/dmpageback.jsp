@@ -10,7 +10,7 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%
-public String getThread(uid) {
+public String getThread(int uid) {
     /* Function returns a string containing the current thread of DMs sent between the current logged-in user, and the given other user 
     */
 
@@ -45,7 +45,7 @@ public String getThread(uid) {
     });
 }
 
-public ArrayList<Pair> getThreadArray(uid) {
+public ArrayList<Pair> getThreadArray(int uid) {
     /* Function returns an ArrayList of tuples containing the current thread of messages sent within the DM conversation and the userId for 
      * the sender of each message
      */
@@ -87,7 +87,7 @@ public ArrayList<Pair> getThreadArray(uid) {
     return messages;
 }
 
-public void writeMessage(cid, uid, message) {     //TODO: ADJUST TO DM SYSTEM (taken from channelwriteback.jsp)!!!
+public void writeMessage(int cid, int uid, String message) {     //TODO: ADJUST TO DM SYSTEM (taken from channelwriteback.jsp)!!!
     /* Function adds a new message to the chat log in the Firebase Database 
     */
 
