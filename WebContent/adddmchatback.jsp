@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <%@ include file="firebaseconnection.jsp" %>
 <%@ include file="dmmenuback.jsp" %>
 <%@ page import="com.google.firebase.database.DataSnapshot" %>
@@ -7,15 +5,12 @@
 <%@ page import="com.google.firebase.database.FirebaseDatabase" %>
 <%@ page import="com.google.firebase.database.DatabaseError" %>
 <%@ page import="com.google.firebase.database.ValueEventListener" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.io.*,java.util.*,java.sql.*" %>
-<%@ page import="java.util.ArrayList" %>
-<%
+<%!
 public ArrayList<Integer> getPotPartners(int uid){
     //function returns an array of userIds with which the current user does not yet have a DM conversation with
 
     //obtain list of users that current user already has a chat with
-      ArrayList<Integer> alreadyExist = getDmPartners(uid);
+    ArrayList<Integer> alreadyExist = getDmPartners(uid);
 
     // Connect to Firebase
     connectdb();
@@ -48,6 +43,4 @@ public ArrayList<Integer> getPotPartners(int uid){
             System.out.println("Error reading potential new DM chats: " + databaseError.getMessage());
         }
     });
-}
-%>
-</html>
+} %>

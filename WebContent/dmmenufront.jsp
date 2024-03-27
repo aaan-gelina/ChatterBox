@@ -4,10 +4,11 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 
-<!-- %@ include file="dmmenuback.jsp" % -->   
-<%@ include file="dmmenuback_test.jsp" %>               <!-- for data display testing, import this file and comment out include file="dmmenuback.jsp" -->                    
+<%@ include file="dmmenuback.jsp" %>   
+<!-- %@ include file="dmmenuback_test.jsp" % -->               <!-- for data display testing, import this file and comment out include file="dmmenuback.jsp" -->                    
 
-<%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing, is supposed to be current logged-in user -->
+<%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing of DM system, is supposed to be set during login -->
+<% session.setAttribute("currentUser", uid); %>
 
 <!DOCTYPE html>
 <html>
