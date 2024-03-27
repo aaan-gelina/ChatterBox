@@ -11,7 +11,7 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%
-public ArrayList<Integer> getPotPartners(uid){
+public ArrayList<Integer> getPotPartners(int uid){
     //function returns an array of userIds with which the current user does not yet have a DM conversation with
 
     //obtain list of users that current user already has a chat with
@@ -25,7 +25,7 @@ public ArrayList<Integer> getPotPartners(uid){
 
     ArrayList<Integer> users = new ArrayList();
   
-    //iterate through existing DM chats (unsure on syntax here)
+    //iterate through all existing DM chats in the database (unsure on syntax here)
     ref.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
