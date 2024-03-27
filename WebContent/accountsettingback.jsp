@@ -1,77 +1,38 @@
-<!DOCTYPE html>
-<html>
-<%@ page file="firebaseconnection.jsp" %>
 <%@ page import="com.google.firebase.database.*" %>
-<%@ page import="com.google.firebase.database.DataSnapshot" %>
-<%@ page import="com.google.firebase.database.DatabaseReference" %>
-<%@ page import="com.google.firebase.database.FirebaseDatabase" %>
-<%@ page import="com.google.firebase.database.DatabaseError" %>
-<%@ page import="com.google.firebase.database.ValueEventListener" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.io.*,java.util.*,java.sql.*" %>
-<%@ page import="javax.servlet.*"%>
-<%@ page import="javax.servlet.http.*"%>
-<%@ page import="java.util.regex.*" %>
-
+<%@ page import="javax.servlet.*" %>
+<%@ page import="javax.servlet.http.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page file="firebaseconnection.jsp" %> 
 
 <%
-    public class AccountSettings extends HttpServlet {
+    if ("POST".equalsIgnoreCase(request.getMethod())) {
+        //get data from the form
+        String userId = request.getParameter("UID");
+        String displayName = request.getParameter("displayName");
+        String bio = request.getParameter("bio");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String status = request.getParameter("status");
 
-        public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //initialize firebase connection and get the reference to the user
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("User");
+        DatabaseReference userRef = ref.child(UID);
 
-            // Initialize Firebase 
-            final FirebaseDatabase database = FirebaseDatabase.getInstance(); //initial connection to firebase
-            DatabaseReference ref = database.getReference("User"); //get a reference to the "User" node 
+        //create a map to update the user data
+        Map<String, Object> userUpdates = new HashMap<>();
+        userUpdates.put("displayName", displayName);
+        userUpdates.put("bio", bio);
+        userUpdates.put("email", email);
+        userUpdates.put("phone", phone);
+        userUpdates.put("status", status);
 
-            // Assuming UID is passed as a parameter
-            String UID = request.getParameter("UID"); //retrieve UID 
-            DatabaseReference userRef = ref.child(UID); //get reference to the specific user's data using the UID
+        //Update the user data in Firebase
+        userRef.updateChildrenAsync(userUpdates);
 
-            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) { //triger when data is available
-                    // Handle the user data snapshot
-                    User user = dataSnapshot.getValue(User.class);
-                    // Set user data as request attributes to be accessible in JSP
-                    request.setAttribute("User", User); //Set the fetched User object as an attribute in the request
-                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/accountSettings.jsp");
-                    dispatcher.forward(request, response);
-                }
-
-                @Override 
-                //Called if there's an error in fetching data from Firebase
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
-        }
-
-        public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            // Get user input from the form
-            String UID = request.getParameter("UID");
-            String email = request.getParameter("email");
-            String fName = request.getParameter("fName");
-            String lName = request.getParameter("lName");
-            String password = request.getParameter("password");
-            String username = request.getParameter("username");
-
-            // Initialize Firebase
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref = database.getReference("User");
-
-            // Update user data in Firebase
-            DatabaseReference userRef = ref.child(userId);
-            Map<String, Object> userUpdates = new HashMap<>();
-            userUpdates.put("username", username);
-            userUpdates.put("email", email);
-            userUpdates.put("fName", fName);
-            userUpdates.put("lName", lName);
-            userUpdates.put("status", status);
-
-            userRef.updateChildrenAsync(userUpdates);
-            // Redirect to confirmation page or back to settings
-            response.sendRedirect("home.jsp");
-        }
+        //redirect user to home page
+        response.sendRedirect("home.jsp"); 
     }
 %>
-</html>
