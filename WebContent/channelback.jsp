@@ -4,29 +4,25 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%
-public class Channel() {
+public class Channel {
     /* Class represents channels in the channel interface of ChatterBox
     */
 
-    private int cid;    // TODO ---> Create some sort of auto-increment
-    private String name;
-    private String desc;
-    private String admins;
-    private String users;
-    private String messages;
+    //Initialize class variables
+    private int globalcid = 1;  
 
-    public void Channel(name, admin) {
+    public void Channel(String name, int admin) {
         /* Function to initialize each unique instance of the channel class
         */
 
-        this.cid = 1;   // TODO ---> Add auto-increment for cid
-        this.name = name;
-        this.messages = "";
-        this.admins = "`" + admin.toString();
-        this.users = "`" + admin.toString();
+        final int cid = globalcid;
+        globalcid += 1;
+        String messages = "";
+        String admins = "`" + String.valueOf(admin);
+        String users = "`" + String.valueOf(admin);
 
         // Connect to firebase
-        DatabaseReference currentChannel = Chatterbase.createRef("Channels", cid);
+        DatabaseReference currentChannel = channel.createChannelRef("Channels", cid);
 
         // Add channel to database and update values
         currentChannel.child("name").setValue(name);
@@ -35,12 +31,12 @@ public class Channel() {
         currentChannel.child("users").setValue(users);
     }
 
-    public String getName(cid) {
+    public String getName(int cid) {
         /* Function returns name of channel from database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -49,12 +45,12 @@ public class Channel() {
         return Chatterbase.readStr(channelRef, "name");
     }
 
-    public String getDesc(cid) {
+    public String getDesc(int cid) {
         /* Function returns desc of channel from database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -63,12 +59,12 @@ public class Channel() {
         return Chatterbase.readStr(channelRef, "desc");
     }
 
-    public String getAdmins(cid) {
+    public String getAdmins(int cid) {
         /* Function returns admins of channel from database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -77,12 +73,12 @@ public class Channel() {
         return Chatterbase.readStr(channelRef, "admins");
     }
 
-    public String getUsers(cid) {
+    public String getUsers(int cid) {
         /* Function returns users of channel from database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -91,12 +87,12 @@ public class Channel() {
         return Chatterbase.readStr(channelRef, "users");
     }
 
-    public String getMessages(cid) {
+    public String getMessages(int cid) {
         /* Function returns a string containing the current thread of messages sent within the channel 
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -105,29 +101,29 @@ public class Channel() {
         return Chatterbase.readStr(channelRef, "messages");
     }
 
-    public ArrayList<Integer> getAdminArray(cid) {
+    public ArrayList<Integer> getAdminArray(int cid) {
         /* Function returns administrator ArrayList
         */
 
         // Get admin arraylist
-        ArrayList<Integer> admins = toArray(getAdmins());
+        ArrayList<Integer> admins = toArray(getAdmins(cid));
 
         // Return admin arraylist
         return admins;
     }
 
-    public ArrayList<Integer> getUserArray(cid) {
+    public ArrayList<Integer> getUserArray(int cid) {
         /* Function returns user ArrayList
         */
 
         // Get user arraylist
-        ArrayList<Integer> users = toArray(getUsers());
+        ArrayList<Integer> users = toArray(getUsers(cid));
 
         // Return user arraylist
         return users;
     }
 
-    public ArrayList<Pair> getMessageArray(cid) {
+    public ArrayList<Pair> getMessageArray(int cid) {
         /* Function returns an ArrayList of tuples containing the current thread of messages sent within the channel and the uid for 
         * the sender of each message
         */
@@ -136,8 +132,8 @@ public class Channel() {
         int start = 1;
         int end;
         int count = 1;
-        int uid = null;
-        ArrayList<Pair> messageArray = new ArrayList();
+        int uid = 0;
+        ArrayList<Pair> messageArray = new ArrayList<Pair>();
         
         // Get messages from database
         String messages = getMessages(cid);
@@ -149,7 +145,7 @@ public class Channel() {
                     end = i - 1;
                     
                     //Store uid to add to tuple arraylist
-                    uid  = Integer.parseInt(messages[start:end]);
+                    uid  = Integer.parseInt(messages.substring(start, end));
                     start = i + 1;
                     count += 1;
                 }
@@ -159,9 +155,9 @@ public class Channel() {
                     end = i - 1;
 
                     // Add uid and message to arraylist
-                    messageArray.add(new Pair<String, Integer>(uid, messages[start:end]));
+                    messageArray.add(new Pair<Integer, String>(uid, messages.substring(start, end)));
                     start = i + 1;
-                    uid = null;
+                    uid = 0;
                     count += 1;
                 }
             }
@@ -171,12 +167,12 @@ public class Channel() {
         return messageArray;
     }
 
-    public void setName(cid, name) {
+    public void setName(int cid, String name) {
         /* Function updates channel name in database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -185,12 +181,12 @@ public class Channel() {
         channelRef.child("name").setValue(name);
     }
 
-    public void setDesc(cid, desc) {
+    public void setDesc(int cid, String desc) {
         /* Function updates channel description in database
         */
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -199,22 +195,22 @@ public class Channel() {
         channelRef.child("desc").setValue(desc);
     }
 
-    public void addMessage(cid, uid, message) {
+    public void addMessage(int cid, int uid, String message) {
         /* Function adds a new message to the channel log
         */
 
         // Initialize variables
-        String newMessage = "`" + uid.toString() + "`" message;
+        String newMessage = "`" + String.valueOf(uid) + "`" + message;
         String thread;
 
         // Get previous message thread from database
-        String messages = getMesages(cid);
+        String messages = getMessages(cid);
 
         // Add new message to thread
-        messages = messages.append(newMessage);
+        messages = messages + newMessage;
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -223,12 +219,12 @@ public class Channel() {
         channelRef.child("messages").setValue(messages);
     }
 
-    public void removeMessage(cid, uid, message) {
+    public void removeMessage(int cid, int uid, String message) {
         /* Function removes a message from the chat log in the Firebase Database 
         */
 
         // Initialize variables
-        ArrayList<Pair> messages = new ArrayList();
+        ArrayList<Pair> messages = new ArrayList<Pair>();
         String newMessages;
         Pair<Integer, String> deletedMessage = new Pair<Integer, String>(uid, message);
 
@@ -236,13 +232,13 @@ public class Channel() {
         messages = getMessageArray(cid);
 
         // Remove message by value of uid and message
-        messages.remove(deletedmessage);
+        messages.remove(deletedMessage);
 
         // Convert array without message to String
         newMessages = messageString(messages);
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -251,7 +247,7 @@ public class Channel() {
         channelRef.child("messages").setValue(newMessages);
     }
 
-    public void addUser(cid, uid) {
+    public void addUser(int cid, int uid) {
         /* Function adds user to channel
         */
 
@@ -259,10 +255,10 @@ public class Channel() {
         String users = getUsers(cid);
 
         // Add user to user list
-        users.append("`" + uid.toString());
+        users = users + "`" + String.valueOf(uid);
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -271,12 +267,12 @@ public class Channel() {
         channelRef.child("users").setValue(users);
     }
 
-    public void removeUser(cid, uid) {
+    public void removeUser(int cid, int uid) {
         /* Function removes user from channel
         */
         
         // Get list of users
-        ArrayList<Integer> users = getUserArray();
+        ArrayList<Integer> users = getUserArray(cid);
 
         // Remove user
         users.remove(uid);
@@ -285,7 +281,7 @@ public class Channel() {
         String userdata = dataString(users);
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -294,7 +290,7 @@ public class Channel() {
         channelRef.child("users").setValue(userdata);
     }
 
-    public void addAdmin(cid, uid) {
+    public void addAdmin(int cid, int uid) {
         /* Function adds admin to channel
         */
 
@@ -302,10 +298,10 @@ public class Channel() {
         String admins = getAdmins(cid);
 
         // Add user to user list
-        admins.append("`" + uid.toString());
+        admins = admins + "`" + String.valueOf(uid);
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -314,12 +310,12 @@ public class Channel() {
         channelRef.child("admins").setValue(admins);
     }
 
-    public void removeAdmin(cid, uid) {
+    public void removeAdmin(int cid, int uid) {
         /* Function removes administrator from channel
         */
         
         // Get list of admins
-        ArrayList<Integer> admins = getAdminArray();
+        ArrayList<Integer> admins = getAdminArray(cid);
 
         // Remove admin
         admins.remove(uid);
@@ -328,7 +324,7 @@ public class Channel() {
         String admindata = dataString(admins);
 
         // Connect to firebase
-        DatabaseReference ref = Chatterbase.createRef("Channels", cid);
+        DatabaseReference ref = firebaseconnect.createChannelRef("Channels", cid);
 
         // Find the channel using cid
         DatabaseReference channelRef = ref.child(cid);
@@ -337,16 +333,16 @@ public class Channel() {
         currentChannel.child("admins").setValue(admindata);
     }
 
-    public boolean isUser(uid, cid) {
+    public boolean isUser(int uid, int cid) {
         /* Function checks if user is a member of a channel
         */
 
         // Get channel user list
-        private ArrayList<Integer> users = getUsers(cid);
+        ArrayList<Integer> users = getUserArray(cid);
 
         // Check if uid is in channel user list
         for (int i = 0; i < users.size() - 1; i++) {
-            if users.get(i).equals(uid.toString()) {
+            if (users.get(i) == uid) {
                 // Return true if user is in user list
                 return true;
             }
@@ -355,16 +351,16 @@ public class Channel() {
         return false;
     }
 
-    public boolean isAdmin(uid, cid) {
+    public boolean isAdmin(int uid, int cid) {
         /* Function checks if user is an administrator of a channel
         */
 
         // Get channel admin list
-        private ArrayList<Integer> admins = getAdmins(cid);
+        ArrayList<Integer> admins = getAdminArray(cid);
 
         // Check if uid is in channel user list
         for (int i = 0; i < admins.size() - 1; i++) {
-            if admins.get(i).equals(uid.toString()) {
+            if (admins.get(i) == uid) {
                 // Return true if user is in user list
                 return true;
             }
@@ -373,24 +369,23 @@ public class Channel() {
         return false;
     }
 
-    public ArrayList<Integer> toArray(str) {
+    public ArrayList<Integer> toArray(String str) {
         /* Function returns an ArrayList containing seperated values broken at deliminator "`" from a String, returns ArrayList
         */
 
         // Initialize variables
         int start = 1;
         int end;
-        ArrayList<Integer> array = new ArrayList();
+        ArrayList<Integer> array = new ArrayList<Integer>();
 
         // Iterate over string to break at deliminator
         for (int i = 1; i < str.length(); i++) {
-            if (thread.charAt(i) == '`') {
+            if (str.charAt(i) == '`') {
                 end = i - 1;
                 
                 // Add to ArrayList
-                array.add(Integer.parseInt(str[start:end]));
+                array.add(Integer.parseInt(str.substring(start), end));
                 start = i + 1;
-                count += 1;
             }
         }
 
@@ -398,7 +393,7 @@ public class Channel() {
         return array;
     }
 
-    public String dataString(data) {
+    public String dataString(ArrayList<Integer> data) {
         /* Function converts ArrayList to a String, returns String
         */
 
@@ -407,25 +402,24 @@ public class Channel() {
 
         // Traverse ArrayList and store in a String with deliminator "`"
         for (int i = 0; i < data.size() - 1; i++) {
-            str.append("`" + data.get(i).toString());
+            str = str + "`" + data.get(i).toString();
         }
 
         // Return String 
         return str;
     }
 
-    public String messageString(messageArray) {
+    public String messageString(ArrayList<Pair> messageArray) {
         /* Function converts ArrayList of messages to a String containing the current thread of messages sent within the channel,
         * returns value string
         */
 
         // Initialize variables
-        ArrayList<Pair> messageArray = messageArray;
         String messages = "";
 
         // Traverse messages ArrayList and store (key, value) Pairs in a string with deliminator "`"
         for (int i = 0; i < messageArray.size() - 1; i++) {
-            messages.append("`" + messageArray.get(i).getKey().toString() + "`" + messageArray.get(i).getValue().toString());
+            messages = messages + "`" + messageArray.get(i).getKey().toString() + "`" + messageArray.get(i).getValue().toString();
         }
 
         // Return String containing current thread of messages sent within channel

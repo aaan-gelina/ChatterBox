@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<%@ page import="ChatterBox.WebContent.channel.channel" %>
 <head>
     <meta charset="UTF-8">
     <title>Channel Chat</title>
