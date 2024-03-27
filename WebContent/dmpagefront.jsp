@@ -13,8 +13,10 @@
 <%@ include file="dmmenuback_test.jsp" %>      <!-- for data display testing, import these files and comment out the actual backend files -->       
 <%@ include file="dmpageback_test.jsp" %>  
 
-<%! int uid = 1; %>                                    <!-- TODO: dummy userID for testing, is supposed to be current logged-in user -->
-<%! int otherUser = -1; %>
+<%! int uid; %>                            
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
+
+<%! int otherUser; %>                              <!-- initialize other user ID -->
 
 <!DOCTYPE html>
 <html>
@@ -126,11 +128,11 @@
 	<div class = "chat_container">                              
         <main>
             <ul id="chat">
-                <%! ArrayList<Message> messages = getThreadArray(otherUser, uid);%>
+                <%! ArrayList<Message> messages = getThreadArray(uid, otherUser);%>
                 <% for(Message i: messages) { %>
                     <li class=<%= (i.getUserId()==uid) ? "you" : "friend" %>>    <!-- determine if sender is you or friend-->
                         <div class="message">
-                            <%= i.getContent()%>
+                            <%= i.getContent()%> 
                         </div>
                     </li>
                 <% } %>

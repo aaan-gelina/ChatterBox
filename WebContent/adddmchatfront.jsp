@@ -4,13 +4,13 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 
-<!-- %@ include file="dmmenuback.jsp" % -->
 <!-- %@ include file="adddmchatback.jsp" % -->
 
-<%@ include file="dmmenuback_test.jsp" %>       <!-- for data display testing, import these file and comment out the actual backend files --> 
+<%@ include file="dmmenuback_test.jsp" %>       <!-- for data display testing, import these files and comment out the actual backend files --> 
 <%@ include file="adddmchatback_test.jsp" %>
 
-<%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing, is supposed to be current logged-in user -->
+<%! int uid; %>                            
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
 
 <!DOCTYPE html>
 <html>
