@@ -7,11 +7,11 @@
 
 <%@ include file="Message.jsp" %>                           <!-- include message class -->
 
-<!-- %@ include file="dmmenuback.jsp" % -->             
-<!-- %@ include file="dmpageback.jsp" % -->  
+<%@ include file="dmmenuback.jsp" %>             
+<%@ include file="dmpageback.jsp" %>  
 
-<%@ include file="dmmenuback_test.jsp" %>      <!-- for data display testing, import these files and comment out the actual backend files -->       
-<%@ include file="dmpageback_test.jsp" %>  
+<!-- %@ include file="dmmenuback_test.jsp" % -->      <!-- for data display testing, import these files and comment out the actual backend files -->       
+<!-- %@ include file="dmpageback_test.jsp" % -->  
 
 <%! int uid; %>                            
 <% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
