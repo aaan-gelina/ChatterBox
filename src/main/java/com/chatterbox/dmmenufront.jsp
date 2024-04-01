@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="dmmenuback.jsp" %>          
 <%@ page import="java.util.Map" %>
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
+
+<%@ include file="dmmenuback.jsp" %>   
+<!-- %@ include file="dmmenuback_test.jsp" % -->               <!-- for data display testing, import this file and comment out include file="dmmenuback.jsp" -->                    
+
+<%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing of DM system, is supposed to be set during login -->
+<% session.setAttribute("currentUser", uid); %>
 
 <!DOCTYPE html>
 <html>
@@ -26,7 +31,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-top: 10px;
         margin-bottom: 10px;
-        max-height: 90vh;
+        height: fit-content;
      }
     .top_container{
         display: flex;
@@ -96,10 +101,16 @@
         </div>                  
         <div class = "list_container">                          
             <ul id="conversations">
-                <%! ArrayList<Integer> users = getDMPartners(uid);%>        <!-- TODO: obtain userID for current user-->
-                <% for(Integer i: users) { %>
+                <%! ArrayList<Integer> users = getDmPartners(uid);%>          <!--load DM partners into list-->  
+                <% if (!users.isEmpty()) {
+                    for(Integer i: users) { %>
+                        <li>
+                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>
+                        </li>
+                    <% }
+                } else { %>
                     <li>
-                        <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>
+                        <i> You currently have no DM chats. </i>
                     </li>
                 <% } %>
             </ul>

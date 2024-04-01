@@ -1,10 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="dmmenuback.jsp" %>
-<%@ include file="adddmchatback.jsp" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
+
+<%@ include file="dmmenuback.jsp" %>
+<%@ include file="adddmchatback.jsp" %>
+
+<!-- %@ include file="dmmenuback_test.jsp" % -->       <!-- for data display testing, import these files and comment out the actual backend files --> 
+<!-- %@ include file="adddmchatback_test.jsp" % -->
+
+<%! int uid; %>                            
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +34,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-top: 10px;
         margin-bottom: 10px;
-        max-height: 90vh;
+        height: fit-content;
      }
     .top_container{
         position: relative;
@@ -84,10 +92,16 @@
         </div>                  
         <div class = "list_container">                      <!--load available users (not already in a chat with me) into list-->          
             <ul id="users">
-               <%! ArrayList<Integer> users = getPotPartners(uid);%>        <!-- TODO: obtain userID for current user-->
-                <% for(Integer i: users) { %>
+               <%! ArrayList<Integer> users = getPotPartners(uid);%>
+               <% if (!users.isEmpty()) {
+                    for(Integer i: users) { %>
+                        <li>
+                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>    <!-- TODO: handle creation of new DM chat -->
+                        </li>
+                    <% }
+                } else { %>
                     <li>
-                        <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a> <!-- handle creation of new DM chat -->
+                        <i> There are no new users for you to chat with. </i>
                     </li>
                 <% } %>
             </ul>

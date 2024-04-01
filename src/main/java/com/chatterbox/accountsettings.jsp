@@ -20,7 +20,6 @@
         h1 {
             color: #333;
             font-size: 24px;
-            text-align: center;
         }
         .form-row {
             display: flex;
@@ -78,17 +77,27 @@
 
 <div class="container">
     <h1>Account Settings</h1>
-    <form action="/updateAccountSettings" method="post">
+    <form action="accountsettingback.jsp" method="post">
         <div class="form-row">
             <label for="userId">User ID:</label>
             <input type="text" id="userId" name="userId" value="123456" readonly class="readonly">
         </div>
-        
+
         <div class="form-row">
-            <label for="displayName">Display Name:</label>
-            <input type="text" id="displayName" name="displayName" value="Mr.Example">
+            <label for="userName">User Name:</label>
+            <input type="text" id="userName" name="userName" value="Mr.Example">
         </div>
-        
+
+        <div class="form-row">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" value="John">
+        </div>
+
+        <div class="form-row">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" value="Doe">
+        </div>
+
         <div class="form-row">
             <label for="bio">Bio:</label>
             <input type="text" id="bio" name="bio" value="I love this project">
@@ -96,7 +105,7 @@
 
         <div class="form-row">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="discord@example.com">
+            <input type="email" id="email" name="email" value="email@example.com">
         </div>
 
         <div class="form-row">
@@ -117,24 +126,12 @@
         <div class="button-row">
             <button class="danger" onclick="confirmDeleteAccount()">Delete Account</button>
             <div>
-                <button type="button" onclick="goBack()">Go Back</button>
+                <!-- Updated Go Back button -->
+                <a href="home.jsp" style="text-decoration: none;">
+                    <button type="button">Go Back</button>
+                </a>
                 <input type="submit" value="Update Settings">
             </div>
         </div>
-    </form>
-</div>
-
-<script>
-    function confirmDeleteAccount() {
-        if (confirm("Are you sure you want to delete your account permanently? This action cannot be undone.")) {
-            // code to delete account permanently
-            // Once account is deleted the user should be sent back to login.jsp
-        }
-    }
-    function goBack() {
-        // code to go back
-    }
-</script>
-
-</body>
-</html>
+        
+   

@@ -1,10 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="dmmenuback.jsp" %>             
-<%@ include file="dmpageback.jsp" %>            
+          
 <%@ page import="java.util.Map" %>
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
+
+<%@ include file="Message.jsp" %>                           <!-- include message class -->
+
+<%@ include file="dmmenuback.jsp" %>             
+<%@ include file="dmpageback.jsp" %>  
+
+<!-- %@ include file="dmmenuback_test.jsp" % -->      <!-- for data display testing, import these files and comment out the actual backend files -->       
+<!-- %@ include file="dmpageback_test.jsp" % -->  
+
+<%! int uid; %>                            
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
+
+<%! int otherUser; %>                              <!-- initialize other user ID -->
 
 <!DOCTYPE html>
 <html>
@@ -109,75 +121,27 @@
 <body>
 <div class = "outside_container">
     <div class="top_container">
-        <%! int otherUser = Integer.parseInt(request.getParameter("uid"));%>          <!-- get uid of other user from url query-->
+        <% otherUser = Integer.parseInt(request.getParameter("uid")); %>          <!-- get uid of other user from url query-->
         <button class = back_button onclick="goBack()">Go Back</button>
-	    <h1><%= getUsername(otherUser)%></h1>                       <!--display username of conversation partner-->
+	    <h1><%= getUsername(otherUser)%></h1>                                       <!--display username of conversation partner-->
     </div>                  
 	<div class = "chat_container">                              
         <main>
             <ul id="chat">
-                <%! ArrayList<Pair> messages = getThreadArray(otherUser);%>
-                <% for(Pair i: messages) { %>
-                    <li class=<%= (i.getKey()==otherUser) ? "friend" : "you" %>>    <!-- determine if sender is you or friend-->
+                <%! ArrayList<Message> messages = getThreadArray(uid, otherUser);%>
+                <% for(Message i: messages) { %>
+                    <li class=<%= (i.getUserId()==uid) ? "you" : "friend" %>>    <!-- determine if sender is you or friend-->
                         <div class="message">
-                            <%= i.getValue()%>
+                            <%= i.getContent()%> 
                         </div>
                     </li>
                 <% } %>
-
-                
-                <li class="friend">
-                    <div class="message">
-                        Something your friend wrote
-                    </div>
-                </li>
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
-                <li class="friend">
-                    <div class="message">
-                        Something your friend wrote
-                    </div>
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
-                <li class="friend">
-                    <div class="message">
-                        Something your friend wrote
-                    </div>
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
-                <li class="friend">
-                    <div class="message">
-                        Something your friend wrote
-                    </div>
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
-                <li class="friend">
-                    <div class="message">
-                        Something your friend wrote
-                    </div>
-                <li class="you">
-                    <div class="message">
-                        Something you wrote
-                    </div>
-                </li>
             </ul>
         </main>
         <footer>
             <form class="send_message">
                 <input style="flex: 1;" name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
-                <button>Send</button>       <!-- TODO: handle sending of message to database, updating chat-->
+                <button>Send</button>           <!-- TODO: handle sending of message to database, updating chat-->
             </form>
         </footer>
 	</div>

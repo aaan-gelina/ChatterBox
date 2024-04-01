@@ -1,33 +1,76 @@
 <!DOCTYPE html>
-<html>
-<nav style="padding:1px">
-</nav>
-<style>
-        h1 {color:rgb(137, 7, 173); font-family: Vivaldi, cursive; padding:50px; font-size: 65px;}
-</style>
 <head>
-        <title>ChatterBox Login Page</title>
-</head>
+        <!-- This is for the tab up top to look nice. Copy it into each page. -->
+    <title>ChatterBox Login Page</title>
+    <link rel="icon" href="img/logo.jpg" type="jpg"> 
+
+<style>
+
+        /* This is the background of page and general alignment */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #C5EBFE; 
+        }
+        
+        
+        #login {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: 170px;
+            background-color: #003366;
+            border-radius: 5px;
+            color: #f6f4f4;
+            text-decoration: none;
+			
+			
+        }
+		#signup {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: 150px;
+            background-color: #003366;
+            border-radius: 5px;
+            color: #f6f4f4;
+            text-decoration: none;
+			
+					
+        }
+		#textbox{
+            padding:10px;
+            border:1px solid #a9a2a2;
+            border-radius:5px;
+
+        }
+		#text {
+            font-weight: bold;
+            color: #173054;
+        }
+    </style>
+
 <body>
-<div align="center" margin="0 auto" style="position: absolute; top: 10%; left: 37.5%; margin-top: -50px; margin-left: -50px; width: 500px; height: 660px; border: 1px solid #a9a2a2; background-color: #ffffff;">
-<h1 align="center">ChatterBox</h1>
+<div id="logo">
+        <img src="img/logo.jpg" alt="Logo" width="350">
+    </div>
 <br>
 <form name="MyForm" method=post action="loginback.jsp">
 <table style="display:inline">
 <tr>
-	<td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Username:</font></div></td>
-	<td><input type="text" name="username"  size=30 maxlength=30 style="padding:10px; border: 1px solid #a9a2a2;"></td>
+	<td><div align="right" id = "text">Username:</font></div></td>
+	<td><input type="text" name="username"  size=30 maxlength=30 id = "textbox" required></td>
 </tr>
 <tr>
-	<td><div align="right"><font face="Cambria, Cochin, Georgia, Times, 'Times New Roman', serif" size="3">Password:</font></div></td>
-	<td><input type="password" name="password" size=30 maxlength="30" style="padding:10px; border: 1px solid #a9a2a2;"></td>
+	<td><div align="right" id = "text"> Password:</font></div></td>
+	<td><input type="password" name="password" size=30 maxlength=30 id = "textbox" required></td>
 </tr>
 </table>
 <br/>
-<input class="submit" type="submit" name="Submit2" value="Log In" style="font-weight:bold; font-size: 20px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; padding: 10px 150px; background-color:#8907AD; color: #ffffff; text-decoration: none; border-radius: 20px; border: 1px solid #8907AD; margin-top: 20px;">
+<input class="submit" type="submit" id = "login" value="Log In" >
 </form>
-<h4 align="center" style="font-weight:normal; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">New to ChatterBox?</h4>
-<h2 align="center"><a href="signupfront.jsp" style="font-weight:bold; font-size: 20px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; display: inline-block; padding: 10px 145px; background-color:#8907AD; color: #ffffff; text-decoration: none; border-radius: 20px; border: 1px solid #8907AD;">Sign Up</a></h2>
+<h3 align="center" id = "text" >New to Chatterbox?</h3>
+<a href="signupfront.jsp" id = "signup" >Sign Up</a>
 </div>
 
 </body>
