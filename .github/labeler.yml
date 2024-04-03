@@ -1,0 +1,14 @@
+# labeler.yml
+pull_request:
+  branches:
+    - main
+    - develop
+  labels:
+    - name: "scrum"
+      condition: "files/changed[] =~ '^ChatterBox/Scrum Meetings/'"
+    - name: "testing"
+      condition: "files/changed[] =~ '^ChatterBox/src/test/'"
+    - name: "backend"
+      condition: "files/changed[] =~ '^ChatterBox/src/main/java/'"
+    - name: "frontend"
+      condition: "files/changed[] =~ '^ChatterBox/src/main/webapp/'"
