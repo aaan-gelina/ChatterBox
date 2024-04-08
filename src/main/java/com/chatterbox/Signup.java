@@ -25,8 +25,10 @@ public class Signup extends HttpServlet {
 
         User nU = new User(username, firstName, lastName, email, password);
 
-
-        /*check is password and email are of valid format and if username exists before sending data to the database */
+        /*
+         * check is password and email are of valid format and if username exists before
+         * sending data to the database
+         */
         if (validateEmail(nU.getEmail()) == true) {
             if (passValidate(nU.getPassword()) == true) {
                 if (userDuplicateCheck(nU.getUName()) == false) {
@@ -61,8 +63,10 @@ public class Signup extends HttpServlet {
 
     }
 
-    // regex password validation for uppercase,lowercase, special character and
-    // length
+    /*
+     * regex password validation for uppercase,lowercase, special character and
+     * length
+     */
     public static boolean passValidate(final String password) {
         final String password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
         Pattern pattern;
