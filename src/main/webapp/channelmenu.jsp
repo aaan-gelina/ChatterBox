@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ page import="com.chatterbox.Channel" %>
 <html>
 <head>
 <meta charset="UTF-8">
