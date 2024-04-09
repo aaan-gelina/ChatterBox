@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chatterbox.Channel" %>
+
 <!DOCTYPE html>
 <head>    
 
@@ -49,5 +52,13 @@
     <a href="channelfront.jsp" id="channels">Channels</a>
     <a href="accountsettings.jsp" id="accountsettings">Account Settings</a>
     <a href="loginfront.jsp" id="logout">Logout</a>
+    <!-- <a href='adminsettingsfront.jsp' id='adminsettings'>Admin Settings</a> -->
+
+    <%
+        Integer uid = (Integer) session.getAttribute("uId");
+        if (Channel.isAdmin(uid)) {
+            out.println("<a href='adminsettingsfront.jsp' id='adminsettings'>Admin Settings</a>");
+        }
+    %>
 </body>
 </html>
