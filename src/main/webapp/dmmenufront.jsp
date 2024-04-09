@@ -3,9 +3,8 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
-
-<%@ include file="dmmenuback.jsp" %>   
-<!-- %@ include file="dmmenuback_test.jsp" % -->               <!-- for data display testing, import this file and comment out include file="dmmenuback.jsp" -->                    
+<%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="com.chatterbox.Dm" %>                  
 
 <%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing of DM system, is supposed to be set during login -->
 <% session.setAttribute("currentUser", uid); %>
@@ -101,11 +100,11 @@
         </div>                  
         <div class = "list_container">                          
             <ul id="conversations">
-                <%! ArrayList<Integer> users = getDmPartners(uid);%>          <!--load DM partners into list-->  
-                <% if (!users.isEmpty()) {
-                    for(Integer i: users) { %>
+                <%! ArrayList<Dm> dms = FirebaseConnect.getExistingDms(uid);%>          <!--load existing Dms into list-->  
+                <% if (!dms.isEmpty()) {
+                    for(Dm i: dms) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>
+                            <a href=<%="./dmpagefront.jsp?dmKey="+ i.getKey()%>><%="User #" + i.getOtherUser(uid)%></a> <!-- TODO: get actual username -->
                         </li>
                     <% }
                 } else { %>
