@@ -1,17 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.Map" %>
+
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
-
-<%@ include file="dmmenuback.jsp" %>
-<%@ include file="adddmchatback.jsp" %>
-
-<!-- %@ include file="dmmenuback_test.jsp" % -->       <!-- for data display testing, import these files and comment out the actual backend files --> 
-<!-- %@ include file="adddmchatback_test.jsp" % -->
+<%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="com.chatterbox.Dm" %>
 
 <%! int uid; %>                            
-<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>          <!-- get uid of current logged-in user -->
 
 <!DOCTYPE html>
 <html>
@@ -90,13 +86,13 @@
             <button class = back_button onclick="goBack()">Go Back</button>
             <h1>Choose a User to Chat with:</h1>  
         </div>                  
-        <div class = "list_container">                      <!--load available users (not already in a chat with me) into list-->          
-            <ul id="users">
-               <%! ArrayList<Integer> users = getPotPartners(uid);%>
+        <div class = "list_container">                                
+            <ul id="users">                                         <!--load available users (not already in a chat with me) into list-->
+               <%! ArrayList<Integer> users = FirebaseConnect.getPotDmPartners(uid);%>
                <% if (!users.isEmpty()) {
                     for(Integer i: users) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%=getUsername(i)%></a>    <!-- TODO: handle creation of new DM chat -->
+                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%="User #" + i%></a>    <!-- TODO: get actual username -->
                         </li>
                     <% }
                 } else { %>

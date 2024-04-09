@@ -1,6 +1,7 @@
 package com.chatterbox;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -98,6 +99,132 @@ public class FirebaseConnect {
             }
         });
         return future.join();
+    }
+
+    public static Dm readDm(String dmKey) {    
+        /* Function returns a dm object from database by key
+        */
+
+        DatabaseReference ref = createEntityRef("DMs");
+        final CompletableFuture<Dm> future = new CompletableFuture<>();
+
+        ref.child(dmKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Dm dm = dataSnapshot.getValue(Dm.class);
+                dm.setKey(dataSnapshot.getKey());
+                
+                // Complete future with retrieved string
+                future.complete(dm); 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+
+        // Wait for future completion, return result
+        return future.join();
+    }
+
+    public static Dm readDm(int currentUser, int otherUser) {    
+        /* Function returns a dm object from database given both userIds
+        */
+        
+        final int currentU = currentUser;
+        final int otherU = otherUser;
+
+        DatabaseReference ref = createEntityRef("DMs");
+        final CompletableFuture<Dm> future = new CompletableFuture<>();
+
+        //find the right dm conversation by using both uids and iterating through existing DM chats
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Dm dm = postSnapshot.getValue(Dm.class);
+                    dm.setKey(postSnapshot.getKey());
+                    int userA = dm.getUserA();
+                    int userB = dm.getUserB();
+                    if((userA == otherU && userB == currentU)||(userB == otherU && userA == currentU)){
+                        // Complete future with retrieved string
+                        future.complete(dm);
+                    }
+                }
+            }
+    
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            // Handle errors
+            future.completeExceptionally(databaseError.toException());
+            }
+        });
+        // Wait for future completion, return result
+        return future.join();
+    }
+
+    public static ArrayList<Dm> getExistingDms(int uid){        
+        //function returns an array of DM chat objects that exist and involve the given user
+
+        DatabaseReference ref = createEntityRef("DMs");
+    
+        final int userId = uid;
+        final ArrayList<Dm> chats = new ArrayList<Dm>();
+        final CompletableFuture<Integer> future = new CompletableFuture<>();
+    
+        //iterate through existing DM chats, get the ones that the current user is part of 
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) { 
+                    Dm dm = postSnapshot.getValue(Dm.class);
+                    dm.setKey(postSnapshot.getKey());
+                    int userA = dm.getUserA();
+                    int userB = dm.getUserB();
+                    if ((userA == userId)||(userB == userId)){
+                        chats.add(dm);
+                    }
+                }
+                future.complete(1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                System.out.println("Error reading available DM chats: " + databaseError.getMessage());
+            }
+        });
+        future.join();
+        return chats;
+    }
+
+    public static ArrayList<Integer> getPotDmPartners(int uid){             
+        //returns a list of userIDs which whom the given userID does not yet have a DM chat
+
+        //TODO: obtain a list of all userIDs from database using readUser(int uid) method, this is dummy data
+        int[] allUsers = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+
+        //Obtain list of DM objects with dm chats that already exist for the given user
+        ArrayList<Dm> existingDMs = getExistingDms(uid);
+
+        ArrayList<Integer> potPartners = new ArrayList<Integer>();
+
+        //loop over list of all users, for each user compare userIds to list of userIds in existingDMs list
+        for (int i=0; i<allUsers.length; i++){
+            boolean canAdd = true;
+            for (Dm j: existingDMs){
+                int userA = j.getUserA();
+                int userB = j.getUserB();
+                if((userA == allUsers[i]) || (userB == allUsers[i]) || (uid == allUsers[i])){
+                     canAdd = false;
+                }
+            }
+            if (canAdd){
+                potPartners.add(allUsers[i]);
+            }
+        }
+        return potPartners;
     }
 
    
