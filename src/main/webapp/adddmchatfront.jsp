@@ -5,6 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.chatterbox.FirebaseConnect" %>
 <%@ page import="com.chatterbox.Dm" %>
+<%@ page import="com.chatterbox.User" %>
 
 <%! int uid; %>                            
 <% uid = (Integer)request.getSession().getAttribute("currentUser"); %>          <!-- get uid of current logged-in user -->
@@ -88,11 +89,11 @@
         </div>                  
         <div class = "list_container">                                
             <ul id="users">                                         <!--load available users (not already in a chat with me) into list-->
-               <%! ArrayList<Integer> users = FirebaseConnect.getPotDmPartners(uid);%>
+               <%! ArrayList<User> users = FirebaseConnect.getPotDmPartners(uid);%>
                <% if (!users.isEmpty()) {
-                    for(Integer i: users) { %>
+                    for(User i: users) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%="User #" + i%></a>    <!-- TODO: get actual username -->
+                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%= i.getUName()%></a>    
                         </li>
                     <% }
                 } else { %>

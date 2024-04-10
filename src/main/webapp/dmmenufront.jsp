@@ -4,7 +4,8 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.chatterbox.FirebaseConnect" %>
-<%@ page import="com.chatterbox.Dm" %>                  
+<%@ page import="com.chatterbox.Dm" %> 
+<%@ page import="com.chatterbox.User" %>                 
 
 <%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing of DM system, is supposed to be set during login -->
 <% session.setAttribute("currentUser", uid); %>
@@ -104,7 +105,8 @@
                 <% if (!dms.isEmpty()) {
                     for(Dm i: dms) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?dmKey="+ i.getKey()%>><%="User #" + i.getOtherUser(uid)%></a> <!-- TODO: get actual username -->
+                            <%! User otherUser = FirebaseConnect.readUser(i.getOtherUser(uid)); %>
+                            <a href=<%="./dmpagefront.jsp?dmKey="+ i.getKey()%>><%= otherUser.getUName() %></a> 
                         </li>
                     <% }
                 } else { %>

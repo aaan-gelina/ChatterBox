@@ -7,13 +7,15 @@
 <%@ page import="com.chatterbox.FirebaseConnect" %>
 <%@ page import="com.chatterbox.Message" %>
 <%@ page import="com.chatterbox.Dm" %>
+<%@ page import="com.chatterbox.User" %>
 
 <%! int uid; %>                            
 <% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
 
 <%! String dmKey; %>                            
 <%! int otherUser; %> 
-<%! Dm dm; %>                                          
+<%! Dm dm; %>  
+<%! User otherUser; %>                                        
 
 <!DOCTYPE html>
 <html>
@@ -130,7 +132,8 @@
         } %>
                            
         <button class = back_button onclick="goBack()">Go Back</button>
-	    <h1><%= "User #" + dm.getOtherUser(uid)%></h1>                           <!-- TODO: display actual username of conversation partner-->
+        <% otherUser = FirebaseConnect.readUser(dm.getOtherUser(uid)); %>
+	    <h1><%= otherUser.getUName()%></h1>                           <!-- display username of conversation partner-->
     </div>                  
 	<div class = "chat_container">                              
         <main>

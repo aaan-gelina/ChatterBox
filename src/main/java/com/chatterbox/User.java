@@ -5,7 +5,9 @@ public class User {
 
     private static int count = 0;
     private int userID;
-    private String fName, lName, uName, email, password, bio;
+    private String fName, lName, uName, email, password, bio, status, phoneNumber;
+
+    public User(){}; //necessary for using firebase getValue method for database user retrieval
 
     //constructor to update account including bio
     public User(String uName, String fName, String lName, String email, String password, String bio) {
@@ -38,6 +40,10 @@ public class User {
 
     public int getUserID() {
         return this.userID;
+    }
+
+    public void setUserID(int userID){
+        this.userID = userID;
     }
 
     public String getFName() {
@@ -80,4 +86,19 @@ public class User {
         this.password = password;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
