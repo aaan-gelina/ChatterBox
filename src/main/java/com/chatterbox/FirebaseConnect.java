@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
+import com.google.firebase.database.ChildEventListener;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -56,6 +55,45 @@ public class FirebaseConnect {
         return ref;
     }
 
+    public static ArrayList<Integer> getChildren(String entity) {
+        /*
+         * Function returns a list of all ids for the objects of type "entity" stored within firebase
+         */
+
+        // Create reference to the desired entity within firebase
+        DatabaseReference ref = createEntityRef(entity);
+        
+        CompletableFuture<ArrayList<Integer>> future = new CompletableFuture<>();
+
+        // Retrieve the data from the desired entity
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Initialize ArrayList
+                ArrayList<Integer> idarray = new ArrayList<>();
+
+                // Iterate over each child in the snapshot
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // Get the key (auto-incrementing ID) of the child
+                    int id = Integer.parseInt(childSnapshot.getKey());
+                    idarray.add(id);
+                }
+
+                // Complete future with retrieved list
+                future.complete(idarray);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+
+        // Wait for future completion, return result
+        return future.join();
+    }
+
     public static Channel readChannel(int cid) {
         /*
          * Function returns a channel from database by cid
@@ -96,6 +134,7 @@ public class FirebaseConnect {
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 User user = dataSnapshot.getValue(User.class);
                 user.setUserID(Integer.parseInt(dataSnapshot.getKey()));
+
                 future.complete(user);
             }
 
@@ -122,8 +161,11 @@ public class FirebaseConnect {
         return future.join();
     }
 
-    public static User readUser(int uid){
-        //returns user object by user id
+    public static User readUser(int uid) {
+        /*
+         * Function returns a user from database by uid
+         */
+
         DatabaseReference ref = createEntityRef("User");
         final CompletableFuture<User> future = new CompletableFuture<>();
 
@@ -142,7 +184,6 @@ public class FirebaseConnect {
                 future.completeExceptionally(databaseError.toException());
             }
         });
-
         // Wait for future completion, return result
         return future.join();
     }
@@ -245,7 +286,7 @@ public class FirebaseConnect {
         return chats;
     }
 
-    public static ArrayList<User> getPotDmPartners(int uid){           
+    public static ArrayList<User> getPotDmPartners(int uid) {            
         //returns a list of userIDs which whom the given userID does not yet have a DM chat
 
         //Obtain a list of all User objects from database
@@ -257,13 +298,14 @@ public class FirebaseConnect {
         ArrayList<User> potPartners = new ArrayList<User>();
 
         //loop over list of all users, for each user compare userId to list of userIds in existingDMs list
-        for (User i: allUsers){
+        for (User i: allUsers) {
             int id = i.getUserID();
             boolean canAdd = true;
+
             for (Dm j: existingDMs){
                 int userA = j.getUserA();
                 int userB = j.getUserB();
-                if((userA == id) || (userB == id) || (uid == id)){
+                if((userA == id) || (userB == id) || (uid == id)) {
                      canAdd = false;
                 }
             }
@@ -278,10 +320,10 @@ public class FirebaseConnect {
         //function returns a list of all existing user objects in the database 
 
         DatabaseReference ref = createEntityRef("User");
-    
+
         final ArrayList<User> users = new ArrayList<User>();
         final CompletableFuture<Integer> future = new CompletableFuture<>();
-    
+
         //iterate through User objects, add all to list
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -322,9 +364,9 @@ public class FirebaseConnect {
                 }
             });
             return future.join();
-    } 
-      
-  public static void updateUserSettings(String userId, String userName, String firstName, 
+    }
+
+    public static void updateUserSettings(String userId, String userName, String firstName, 
                                           String lastName, String bio, String email, 
                                           String phone, String status) {
         try {
@@ -346,6 +388,6 @@ public class FirebaseConnect {
             e.printStackTrace();
             // Handle the exception (e.g., log it, return error status, etc.)
         }
-  }
+    }
    
 }

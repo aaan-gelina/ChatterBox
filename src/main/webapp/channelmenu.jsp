@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ page import="com.chatterbox.Channel" %>
+<%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="java.util.ArrayList" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -92,15 +94,24 @@
         </div>                  
         <div class = "list_container">                              
             <ul id="channels">
-                <li>
-                    <a href="./channelfront.jsp">Channel #1</a>     
-                </li>
-                <li>
-                    <a href="./channelfront.jsp">Channel #2</a>     
-                </li>
-                <li>
-                    <a href="./channelfront.jsp">Channel #3</a>     
-                </li>
+                <%
+                    // Fake uid in place of system variable
+                    int uid =1;
+
+                    // Get list of channels from database
+                    ArrayList<Integer> channels = FirebaseConnect.getChildren("Channels");
+
+                    // Populate list of channels on menu
+                    for (Integer cid : channels) {
+                        Channel channel = FirebaseConnect.readChannel(cid);
+
+                        if (channel.isUser(uid)) {
+                            out.println("<li>");
+                            out.println("<a href=\"./channel.jsp?channel=" + channel + "\">" + channel.getName() + "</a>");
+                            out.println("</li>");
+                        }
+                    } 
+                %>
             </ul>
         </div>
     </div>

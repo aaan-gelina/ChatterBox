@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <%@ page import="com.chatterbox.Channel" %>
+<%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="java.util.ArrayList" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -104,42 +106,45 @@
         <div class="content_container">
             <div class="members_list">
                 <h2>Members</h2>
-                <p>Member 1</p>
-                <p>Member 2</p>
-                <p>Member 3</p>
-                <p>Member 4</p>
-                <p>Member 5</p>
-                <p>Member 6</p>
+                    <%
+                        // Fake uid in place of system variable
+                        int uid =1;
+
+                        // Get channel from channelmenu.jsp
+                        Channel channel = request.getParameter("channel");
+
+                        // List channel members
+                        ArrayList<Integer> users = channel.getUserArray();
+                        for (Integer uid : users) {
+                            out.println("<p>" + FirebaseConnect.readUser(uid).getUName() + "</p>");
+                        }
+                    %>
             </div>
 
             <div class="chat_container">
-                <h1>Channel Name</h1> <!-- TODO: Get channel name from database or query -->
-                <main> <!--TODO(JSP): Load chat messages into list-->
+                <h1>Channel Name</h1> 
+                <main> 
                     <ul id="chat">
-                        <li>
-                            <span class="username">John:</span>
-                            <div class="message">heyyyyyyyy</div>
-                        </li>
-                        <li>
-                            <span class="username">Emma:</span>
-                            <div class="message">Hiiiiii</div>
-                        </li>
-                        <li>
-                            <span class="username">Connor:</span>
-                            <div class="message">how is it going</div>
-                        </li>
-                        <li>
-                            <span class="username">Joe:</span>
-                            <div class="message">Bye</div>
-                        </li>
-                        <li>
-                            <span class="username">Connor:</span>
-                            <div class="message">Byeeee</div>
-                        </li>
+                        <%
+                            // Fake uid in place of system variable
+                            int uid =1;
+
+                            // Get channel from channelmenu.jsp
+                            Channel channel = request.getParameter("channel");
+
+                            // Display channel messages
+                            ArrayList<Pair<Integer, String>> messages = channel.getMessageArray();
+                            for (Pair<Integer, String> usermessage : messages) {
+                                out.println("<li>");
+                                out.println('<span class="username">' + FirebaseConnect.readUser(usermessage.getKey()).getUName() + ':</span>');
+                                out.println('<div class="message">' + usermessage.getValue().toString() + '</div>');
+                                out.println("</li>");
+                            }
+                        %>
                     </ul>
                 </main>
                 <footer>
-                    <form class="send_message">
+                    <form class="send_message" method="get" action=channel.jsp>
                         <input name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
                         <button>Send</button> <!-- TODO(JSP): handle sending of message to database, updating chat-->
                     </form>
