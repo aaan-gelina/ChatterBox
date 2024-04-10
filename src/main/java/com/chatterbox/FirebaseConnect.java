@@ -2,7 +2,11 @@ package com.chatterbox;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -12,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
 
 public class FirebaseConnect {
     public static void connectFirebase() {
@@ -298,5 +303,49 @@ public class FirebaseConnect {
         return users;
     }
 
+    public static User readUserSettings(String uid) {
+    
+            DatabaseReference ref = createEntityRef("User");
+            CompletableFuture<User> future = new CompletableFuture<>();
+    
+            ref.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+    
+                    future.complete(user);
+                }
+    
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    future.completeExceptionally(databaseError.toException());
+                }
+            });
+            return future.join();
+    } 
+      
+  public static void updateUserSettings(String userId, String userName, String firstName, 
+                                          String lastName, String bio, String email, 
+                                          String phone, String status) {
+        try {
+            DatabaseReference ref = createEntityRef("User");
+            DatabaseReference userRef = ref.child(userId);
+
+            Map<String, Object> userUpdates = new HashMap<>();
+            userUpdates.put("username", userName);
+            userUpdates.put("fName", firstName);
+            userUpdates.put("lName", lastName);
+            userUpdates.put("bio", bio);
+            userUpdates.put("email", email);
+            userUpdates.put("phoneNumber", phone);
+            userUpdates.put("status", status);
+
+            // Perform the update
+            userRef.updateChildrenAsync(userUpdates).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., log it, return error status, etc.)
+        }
+  }
    
 }
