@@ -1,3 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="com.chatterbox.User" %>
+
+
+<%! int uid; %>                            
+<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>
+<% User user = null;
+    try {
+        user = FirebaseConnect.readUserSettings(String.valueOf(uid));
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,58 +94,69 @@
     <form action="accountsettingback.jsp" method="post">
         <div class="form-row">
             <label for="userId">User ID:</label>
-            <input type="text" id="userId" name="userId" value="123456" readonly class="readonly">
+            <input type="text" id="userId" name="userId" value="<%= uid %>" readonly class="readonly">
         </div>
 
-        <div class="form-row">
-            <label for="userName">User Name:</label>
-            <input type="text" id="userName" name="userName" value="Mr.Example">
-        </div>
+        <% if (user != null) { %>
+            <div class="form-row">
+                <label for="userName">User Name:</label>
+                <input type="text" id="userName" name="userName" value="<%= user.getUsername() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" value="John">
-        </div>
+            <div class="form-row">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" value="<%= user.getFName() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" value="Doe">
-        </div>
+            <div class="form-row">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" value="<%= user.getLName() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="bio">Bio:</label>
-            <input type="text" id="bio" name="bio" value="I love this project">
-        </div>
+            <div class="form-row">
+                <label for="bio">Bio:</label>
+                <input type="text" id="bio" name="bio" value="<%= user.getBio() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="email@example.com">
-        </div>
+            <div class="form-row">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<%= user.getEmail() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" value="+1234567890">
-        </div>
+            <div class="form-row">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" value="<%= user.getPhoneNumber() %>">
+            </div>
 
-        <div class="form-row">
-            <label for="status">Online Status:</label>
-            <select id="status" name="status">
-                <option value="online" selected>Online</option>
-                <option value="offline">Offline</option>
-                <option value="busy">Busy</option>
-                <option value="away">Away</option>
-            </select>
-        </div>
+            <div class="form-row">
+                <label for="status">Online Status:</label>
+                <select id="status" name="status">
+                    <option value="online" <%= "online".equals(user.getStatus()) ? "selected" : "" %>>Online</option>
+                    <option value="offline" <%= "offline".equals(user.getStatus()) ? "selected" : "" %>>Offline</option>
+                    <option value="busy" <%= "busy".equals(user.getStatus()) ? "selected" : "" %>>Busy</option>
+                    <option value="away" <%= "away".equals(user.getStatus()) ? "selected" : "" %>>Away</option>
+                </select>
+            </div>
+        <% } else { %>
+            <p>User data not found.</p>
+        <% } %>
 
         <div class="button-row">
             <button class="danger" onclick="confirmDeleteAccount()">Delete Account</button>
             <div>
-                <!-- Updated Go Back button -->
                 <a href="home.jsp" style="text-decoration: none;">
                     <button type="button">Go Back</button>
                 </a>
                 <input type="submit" value="Update Settings">
             </div>
         </div>
-        
-   
+    </form>
+</div>
+
+<script>
+    function confirmDeleteAccount() {
+        // JavaScript function for delete confirmation
+    }
+</script>
+</body>
+</html>
