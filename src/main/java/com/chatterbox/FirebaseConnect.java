@@ -55,6 +55,45 @@ public class FirebaseConnect {
         return ref;
     }
 
+    public static ArrayList<Integer> getChildren(String entity) {
+        /*
+         * Function returns a list of all ids for the objects of type "entity" stored within firebase
+         */
+
+        // Create reference to the desired entity within firebase
+        DatabaseReference ref = createEntityRef(entity);
+        
+        CompletableFuture<ArrayList<Integer>> future = new CompletableFuture<>();
+
+        // Retrieve the data from the desired entity
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Initialize ArrayList
+                ArrayList<Integer> idarray = new ArrayList<>();
+
+                // Iterate over each child in the snapshot
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // Get the key (auto-incrementing ID) of the child
+                    int id = Integer.parseInt(childSnapshot.getKey());
+                    idarray.add(id);
+                }
+
+                // Complete future with retrieved list
+                future.complete(idarray);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+
+        // Wait for future completion, return result
+        return future.join();
+    }
+
     public static Channel readChannel(int cid) {
         /*
          * Function returns a channel from database by cid
@@ -91,6 +130,30 @@ public class FirebaseConnect {
         CompletableFuture<User> future = new CompletableFuture<>();
 
         ref.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                future.complete(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+        return future.join();
+    }
+
+    public static User readUser(int uid) {
+        /*
+         * Function returns a user from database by uid
+         */
+
+        DatabaseReference ref = createEntityRef("User");
+        CompletableFuture<User> future = new CompletableFuture<>();
+
+        ref.child(String.valueOf(uid)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -250,6 +313,8 @@ public class FirebaseConnect {
                 }
             });
             return future.join();
+    }
+
     public static void updateUserSettings(String userId, String userName, String firstName, 
                                           String lastName, String bio, String email, 
                                           String phone, String status) {
