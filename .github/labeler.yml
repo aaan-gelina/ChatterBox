@@ -5,10 +5,10 @@ pull_request:
     - develop
   labels:
     - name: "scrum"
-      condition: "files/changed[] =~ '^Scrum Meetings/'"
+      condition: "files/changed =~ '^Scrum Meetings/'"
     - name: "testing"
-      condition: "files/changed[] =~ '^src/test/'"
+      condition: "files/changed =~ '^src/test/'"
     - name: "backend"
-      condition: "files/changed[] =~ '^src/main/java/'"
+      condition: "files/changed =~ '^src/main/java/'"
     - name: "frontend"
-      condition: "files/changed[] =~ '^src/main/webapp/'"
+      condition: "files/changed =~ '^src/main/webapp/'"
