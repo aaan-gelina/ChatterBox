@@ -21,9 +21,11 @@ public class Dm {
         this.userA = currentUser;
         this.userB = otherUser;
         this.messages = "";
-
         // Add dm conversation to database
-        this.key = addDm(this);                                                  
+        String newKey = addDm(this);
+        this.key = newKey;
+        //read newly created Dm from database to ensure proper save
+        Dm temp = FirebaseConnect.readDm(currentUser, otherUser);                                                  
     }
 
     private String addDm(Dm myDm) {           
@@ -134,6 +136,9 @@ public class Dm {
 
         //update the changed DM object in firebase
         updateFirebase();
+        //read newly updated Dm from database to ensure proper save
+        Dm temp = FirebaseConnect.readDm(this.key);
+
     }
 
     private void updateFirebase() {                                     

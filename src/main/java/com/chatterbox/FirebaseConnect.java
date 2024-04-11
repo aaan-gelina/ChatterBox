@@ -26,7 +26,7 @@ public class FirebaseConnect {
         // use correct path as it is different for all of us)
         try {
             FileInputStream serviceAccount = new FileInputStream(
-    "/Users/yiuunammm/Desktop/apache-tomcat-9.0.86/webapps/ChatterBox/src/main/java/com/chatterbox/lib/chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
+                "/Users/yiuunammm/Desktop/apache-tomcat-9.0.86/webapps/ChatterBox/src/main/java/com/chatterbox/lib/chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
 
 
 
