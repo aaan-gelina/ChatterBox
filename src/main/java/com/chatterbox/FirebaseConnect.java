@@ -22,10 +22,13 @@ public class FirebaseConnect {
         /*
          * Function connects to Firebase Database
          */
-
+        
+        // use correct path as it is different for all of us)
         try {
             FileInputStream serviceAccount = new FileInputStream(
-                    "src\\main\\java\\com\\chatterbox\\lib\\chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
+    "/Users/yiuunammm/Desktop/apache-tomcat-9.0.86/webapps/ChatterBox/src/main/java/com/chatterbox/lib/chatterbox-a99b2-firebase-adminsdk-ygvbi-d459d7c613.json");
+
+
 
             @SuppressWarnings("deprecation")
             FirebaseOptions options = new FirebaseOptions.Builder()
@@ -129,7 +132,7 @@ public class FirebaseConnect {
         DatabaseReference ref = createEntityRef("User");
         CompletableFuture<User> future = new CompletableFuture<>();
 
-        ref.orderByChild("uName").equalTo(username).addChildEventListener(new ChildEventListener() {
+        ref.orderByChild("UName").equalTo(username).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 User user = dataSnapshot.getValue(User.class);
@@ -367,27 +370,26 @@ public class FirebaseConnect {
     }
 
     public static void updateUserSettings(String userId, String userName, String firstName, 
-                                          String lastName, String bio, String email, 
-                                          String phone, String status) {
-        try {
-            DatabaseReference ref = createEntityRef("User");
-            DatabaseReference userRef = ref.child(userId);
+                                      String lastName, String bio, String email, 
+                                      String phone, String status) {
+    try {
+        DatabaseReference ref = createEntityRef("User");
+        DatabaseReference userRef = ref.child(userId);
 
-            Map<String, Object> userUpdates = new HashMap<>();
-            userUpdates.put("username", userName);
-            userUpdates.put("fName", firstName);
-            userUpdates.put("lName", lastName);
-            userUpdates.put("bio", bio);
-            userUpdates.put("email", email);
-            userUpdates.put("phoneNumber", phone);
-            userUpdates.put("status", status);
+        Map<String, Object> userUpdates = new HashMap<>();
+        userUpdates.put("uName", userName);
+        userUpdates.put("fName", firstName);
+        userUpdates.put("lName", lastName);
+        userUpdates.put("bio", bio);
+        userUpdates.put("email", email);
+        userUpdates.put("phoneNumber", phone);
+        userUpdates.put("status", status);
 
-            // Perform the update
-            userRef.updateChildrenAsync(userUpdates).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            // Handle the exception (e.g., log it, return error status, etc.)
-        }
+        userRef.updateChildrenAsync(userUpdates).get();
+    } catch (InterruptedException | ExecutionException e) {
+        e.printStackTrace();
     }
-   
+
+}
+
 }
