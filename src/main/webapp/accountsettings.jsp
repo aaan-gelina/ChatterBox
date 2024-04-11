@@ -4,7 +4,7 @@
 
 
 <%! int uid; %>                            
-<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>
+<% uid = 1; %>
 <% User user = null;
     try {
         user = FirebaseConnect.readUserSettings(String.valueOf(uid));
@@ -100,7 +100,7 @@
         <% if (user != null) { %>
             <div class="form-row">
                 <label for="userName">User Name:</label>
-                <input type="text" id="userName" name="userName" value="<%= user.getUsername() %>">
+                <input type="text" id="userName" name="userName" value="<%= user.getUName() %>">
             </div>
 
             <div class="form-row">
