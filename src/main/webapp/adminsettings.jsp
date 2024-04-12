@@ -167,13 +167,49 @@
 </div>
 
 </body>
-<!-- 
+<%-- 
     COMMENT/NOTE
     Some methods and ideas I could have implemented. Basically the adminsettings page if I could have fetched the channel object.
     If I could have retrieved the channel object I could have used channel.getName() to get the name.
-    Then I would have used 
-    Also could have used user.getName() 
--->
+    Then I would have used a lot of methods from the User and Channel classes.
+
+    out.println("<div class='container'>");
+    out.println("<div class='box' id='channelList'>");
+    out.println("<h2>Channels</h2>");
+
+    // listing the channels by name. the method should use the method from Adminsettingsback 
+    // using the channel.getId() we get the channels ids and channel.getUsers() for its users. 
+    // we pass it into the highlight channel function so that we can use them in our other functions
+
+    List<Channel> channels = Adminsettingsback.getAllChannels(); 
+    for (Channel channel : channels) {
+        out.println("<button class='channel-button' onclick=\"highlightChannel('" + channel.getId() + "', '" + channel.getUsers() + "')\">" + channel.getName() + "</button>");
+    }
+        
+    out.println("</div>");        
+
+    out.println("<div class='box' id='highlightedChannel'><h2>Highlighted Channel</h2></div>");
+
+    function highlightChannel(channelId, usersStr) {
+        var users = usersStr.split('`'); //assuming the users ids in the string will be seperated by a "`"   
+
+        // Prints out the channel name and the delete button. Inside the deleteChannel function we pass the parameter "channel" so that we can 
+        var channelMembers = '<h2>Channel ' + channelId + '</h2><button class="delete-button" onclick="deleteChannel()">Delete Channel</button>';
+
+        channelMembers += '<div class="channel-members"><h3>Members:</h3>';
+         
+        for (var i = 0; i < users.length; i++) {
+
+            // we print out the list of user. since we have their iDs
+            var user = users[i];
+            channelMembers += "<div class='user-actions'><span class='user-name'>" + <% User.getUname(user) %> + "</span>"
+            + "<button class='remove-button' onclick='removeUser(\"" + user + "\")'>Remove</button>"
+            + "<button class='moderator-button user-button' onclick='appointModerator(\"" + user + "\")'>Appoint as Moderator</button></div>";
+            
+        }
+        channelMembers += '</div>'; 
+        document.getElementById('highlightedChannel').innerHTML = channelMembers;
+--%>
 </html>
 
 
