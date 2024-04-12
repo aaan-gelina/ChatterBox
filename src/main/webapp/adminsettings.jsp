@@ -170,31 +170,6 @@
 <!-- 
     COMMENT/NOTE
     Some methods and ideas I could have implemented. Basically the adminsettings page if I could have fetched the channel object.
-    
-        FirebaseConnect.connectFirebase();
-        int cid = 1; // You can dynamically assign or fetch this value
-        CompletableFuture<Channel> future = FirebaseConnect.readChannel(cid);
-        Channel channel = null;
-        try {
-            channel = future.get(10, TimeUnit.SECONDS); // Use get with timeout to avoid indefinite waiting
-        } catch (TimeoutException te) {
-            out.println("Request timed out. Please try again.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (channel != null) {
-    
-        <div>
-            <h2> channel.getName() </h2>
-        </div>
-    
-        } else { 
-    
-        <p>Channel data not found.</p>
-    
-        } 
-
-
     If I could have retrieved the channel object I could have used channel.getName() to get the name.
     Then I would have used 
     Also could have used user.getName() 
