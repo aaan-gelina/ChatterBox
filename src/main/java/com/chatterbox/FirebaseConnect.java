@@ -97,6 +97,37 @@ public class FirebaseConnect {
         return future.join();
     }
 
+    public static ArrayList<Channel> getChannels(int uid){        
+        //function returns an array of DM chat objects that exist and involve the given user
+
+        DatabaseReference ref = createEntityRef("Channels");
+    
+        final int userId = uid;
+        final ArrayList<Channel> channels = new ArrayList<Channel>();
+        final CompletableFuture<Integer> future = new CompletableFuture<>();
+    
+        // Iterate through existing channels, get channels current user is part of 
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) { 
+                    Channel channel = postSnapshot.getValue(Channel.class);
+                    if (channel.isUser(userId)){
+                        channels.add(channel);
+                    }
+                }
+                future.complete(1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                System.out.println("Error reading available DM chats: " + databaseError.getMessage());
+            }
+        });
+        future.join();
+        return channels;
+    }
+
     public static Channel readChannel(int cid) {
         /*
          * Function returns a channel from database by cid

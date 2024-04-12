@@ -144,10 +144,12 @@
                     </ul>
                 </main>
                 <footer>
-                    <form class="send_message" method="get" action=channel.jsp>
-                        <input name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
-                        <button>Send</button> <!-- TODO(JSP): handle sending of message to database, updating chat-->
-                    </form>
+                    <%
+                        out.println('<form class="send_message" method="get" action="sendchannelchat.jsp?channel=" + channel + ">"');
+                        out.println('<input name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>');
+                        out.println('<button>Send</button>');
+                        out.println('</form>');
+                    %>
                 </footer>
             </div>
         </div>

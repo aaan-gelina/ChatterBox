@@ -99,17 +99,13 @@
                     int uid =1;
 
                     // Get list of channels from database
-                    ArrayList<Integer> channels = FirebaseConnect.getChildren("Channels");
+                    ArrayList<Channels> channels = FirebaseConnect.getChannels(uid);
 
                     // Populate list of channels on menu
-                    for (Integer cid : channels) {
-                        Channel channel = FirebaseConnect.readChannel(cid);
-
-                        if (channel.isUser(uid)) {
-                            out.println("<li>");
-                            out.println("<a href=\"./channel.jsp?channel=" + channel + "\">" + channel.getName() + "</a>");
-                            out.println("</li>");
-                        }
+                    for (Channel channel : channels) {
+                        out.println("<li>");
+                        out.println("<a href=\"./channel.jsp?channel=" + channel + "\">" + channel.getName() + "</a>");
+                        out.println("</li>");
                     } 
                 %>
             </ul>

@@ -52,6 +52,9 @@ public class Channel {
 
         // Send channel data to database
         channelref.setValueAsync(channels);
+
+        // Read back from database to store effectively
+        Channel thischannel = FirebaseConnect.readChannel(mycid);
     }
 
     private void updateFirebase() {
@@ -313,7 +316,7 @@ public class Channel {
         return false;
     }
 
-    public ArrayList<Integer> toArray(String str) {
+    private ArrayList<Integer> toArray(String str) {
         /* Function returns an ArrayList containing seperated values broken at delimator "`" from a String, returns ArrayList
         */
 
@@ -337,7 +340,7 @@ public class Channel {
         return array;
     }
 
-    public String dataString(ArrayList<Integer> data) {
+    private String dataString(ArrayList<Integer> data) {
         /* Function converts ArrayList to a String, returns String
         */
 
@@ -353,7 +356,7 @@ public class Channel {
         return str;
     }
 
-    public String messageString(ArrayList<Pair<Integer, String>> messageArray) {
+    private String messageString(ArrayList<Pair<Integer, String>> messageArray) {
         /* Function converts ArrayList of messages to a String containing the current thread of messages sent within the channel,
         * returns value string
         */
