@@ -128,8 +128,12 @@ public class Dm {
 
     public void sendMessage(int currentUser, String content){           
         //add message to message list of current DM conversation object
-
-        String newMessage = "`" + currentUser + "`" + content;
+        String newMessage;
+        if(this.messages.equals("")){
+            newMessage = currentUser + "`" + content;
+        }else{
+            newMessage = "`" + currentUser + "`" + content;
+        }
 
         // Add new message to thread
         this.messages += newMessage;

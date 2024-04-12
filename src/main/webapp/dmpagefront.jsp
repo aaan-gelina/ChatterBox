@@ -10,12 +10,25 @@
 <%@ page import="com.chatterbox.User" %>
 
 <%! int uid; %>                            
-<% uid = (Integer)request.getSession().getAttribute("currentUser"); %>      <!-- get uid of current logged-in user -->
+<%! String dmKey = null; %>                            
+<%! int otherUser = 0; %> 
+<%! Dm dm; %>
+<%! ArrayList<Message> messages; %>
 
-<%! String dmKey; %>                            
-<%! int otherUser; %> 
-<%! Dm dm; %>  
-<%! User otherUser; %>                                        
+<% 
+uid = (Integer)request.getSession().getAttribute("currentUser");         //get uid of current logged-in user from session storage
+if (request.getParameterMap().containsKey("otherUser")){
+    otherUser = Integer.parseInt(request.getParameter("otherUser"));     //get uid for other user from url query if redirected from adddmchat page
+    dm = new Dm(uid, otherUser);                          //if otherUser was passed through url, create new chat
+    dmKey = dm.getKey();
+}else{
+    dmKey = request.getParameter("dmKey");                                      //else get dmkey from url query
+    dm = FirebaseConnect.readDm(dmKey);                          //else, read existing Dm object from database by dmKey
+    otherUser = dm.getOtherUser(uid);
+}
+session.setAttribute("dmKey", dmKey);                           //save dmKey in session storage
+messages = dm.getMessageList();
+%>                                       
 
 <!DOCTYPE html>
 <html>
@@ -119,26 +132,13 @@
 
 <body>
 <div class = "outside_container">
-    <div class="top_container">
-        <% dmKey = request.getParameter("dmKey"); %>          <!-- get dmkey from url query-->
-        <% otherUser = Integer.parseInt(request.getParameter("uid")); %>     <!-- get uid for other user from url query if redirected from adddmchat page-->
-
-        <% if (otherUser != null){
-            dm = new Dm(uid, otherUser);                          //if a uid was passed through url, create new chat
-            session.setAttribute("dmKey", dm.getKey());                        //save dmKey in session storage
-        } else{
-            dm = FirebaseConnect.readDm(dmKey);                          //else, read existing Dm object from database by dmKey
-            session.setAttribute("dmKey", dmKey);                           //save dmKey in session storage
-        } %>
-                           
+    <div class="top_container">                           
         <button class = back_button onclick="goBack()">Go Back</button>
-        <% otherUser = FirebaseConnect.readUser(dm.getOtherUser(uid)); %>
-	    <h1><%= otherUser.getUName()%></h1>                           <!-- display username of conversation partner-->
+	    <h1><%= "User #" + otherUser %></h1>                           <!-- display username of conversation partner-->
     </div>                  
 	<div class = "chat_container">                              
         <main>
             <ul id="chat">
-                <%! ArrayList<Message> messages = dm.getMessageList();%>
                 <% for(Message i: messages) { %>
                     <li class=<%= (i.getUserId()==uid) ? "you" : "friend" %>>       <!-- determine if sender is you or friend-->
                         <div class="message">
@@ -149,7 +149,7 @@
             </ul>
         </main>
         <footer>
-            <form class="send_message" method="post" action="/senddm.jsp">
+            <form class="send_message" method="post" action="./senddm.jsp">
                 <input style="flex: 1;" name="usermessage" type="text" id="usermessage" placeholder="Type your message here..."/>
                 <button>Send</button>           
             </form>
@@ -159,7 +159,7 @@
 
 <script>
     function goBack() {
-        history.back();
+        window.location = "./dmmenufront.jsp"; 
     }
 </script>
 

@@ -89,11 +89,11 @@
         </div>                  
         <div class = "list_container">                                
             <ul id="users">                                         <!--load available users (not already in a chat with me) into list-->
-               <%! ArrayList<User> users = FirebaseConnect.getPotDmPartners(uid);%>
-               <% if (!users.isEmpty()) {
-                    for(User i: users) { %>
+               <%! ArrayList<Integer> pot = FirebaseConnect.getPotDmPartners(uid);%>
+               <% if (!pot.isEmpty()) {
+                    for(Integer i: pot) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?uid="+ i%>><%= i.getUName()%></a>    
+                            <a href=<%="./dmpagefront.jsp?otherUser="+ i%>><%= "User #" + i %></a>    
                         </li>
                     <% }
                 } else { %>
