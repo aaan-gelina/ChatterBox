@@ -14,6 +14,7 @@
 <%! int otherUser = 0; %> 
 <%! Dm dm; %>
 <%! ArrayList<Message> messages; %>
+<%! User otherUserObject; %>
 
 <% 
 uid = (Integer)request.getSession().getAttribute("currentUser");         //get uid of current logged-in user from session storage
@@ -28,6 +29,7 @@ if (request.getParameterMap().containsKey("otherUser")){
 }
 session.setAttribute("dmKey", dmKey);                           //save dmKey in session storage
 messages = dm.getMessageList();
+otherUserObject = FirebaseConnect.readUser(otherUser);
 %>                                       
 
 <!DOCTYPE html>
@@ -134,7 +136,7 @@ messages = dm.getMessageList();
 <div class = "outside_container">
     <div class="top_container">                           
         <button class = back_button onclick="goBack()">Go Back</button>
-	    <h1><%= "User #" + otherUser %></h1>                           <!-- display username of conversation partner-->
+	    <h1><%= otherUserObject.getUName() %></h1>                           <!-- display username of conversation partner-->
     </div>                  
 	<div class = "chat_container">                              
         <main>
