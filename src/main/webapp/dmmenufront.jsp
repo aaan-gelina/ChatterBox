@@ -97,7 +97,9 @@
 <body>
     <div class = "outside_container">
         <div class="top_container">
-            <button class = back_button onclick="goBack()">Go Back</button>
+                <a href="home.jsp">
+                    <button class="back_button">Go Back</button>
+                </a>
             <h1>Your DM Chats</h1>
             <button class = add_button onclick="addChat()">Add Chat</button>     
         </div>                  
