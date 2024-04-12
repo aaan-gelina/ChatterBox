@@ -49,7 +49,7 @@
 
     <!-- This is how to get a button to send you to another page. -->
     <a href="dmmenufront.jsp" id="dmmenu">DM Menu</a>
-    <a href="channelfront.jsp" id="channels">Channels</a>
+    <a href="channelmenu.jsp" id="channels">Channels</a>
     <a href="accountsettings.jsp" id="accountsettings">Account Settings</a>
     <a href="loginfront.jsp" id="logout">Logout</a>
     <a href='adminsettingsfront.jsp' id='adminsettings'>Admin Settings</a>
