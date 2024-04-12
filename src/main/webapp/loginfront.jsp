@@ -55,7 +55,7 @@
         <img src="img/logo.jpg" alt="Logo" width="350">
     </div>
 <br>
-<form name="MyForm" method=post action="loginback.jsp">
+<form name="MyForm" method=post action="home.jsp">
 <table style="display:inline">
 <tr>
 	<td><div align="right" id = "text">Username:</font></div></td>
