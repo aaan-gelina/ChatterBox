@@ -126,6 +126,9 @@
                 <main> 
                     <ul id="chat">
                         <%
+                            // Connect to firebase
+                            FirebaseConnect.connectFirebase(); 
+                            
                             // Fake uid in place of system variable
                             int uid =1;
 

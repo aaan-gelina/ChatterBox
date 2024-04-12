@@ -3,7 +3,10 @@
 <!DOCTYPE html>
 <%@ page import="com.chatterbox.Channel" %>
 <%@ page import="com.chatterbox.FirebaseConnect" %>
+<%@ page import="java.util.concurrent.CompletableFuture" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="java.util.concurrent.CompletionException" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -108,7 +111,6 @@
                         out.println("</li>");
                     } 
                 %>
-            </ul>
         </div>
     </div>
 
