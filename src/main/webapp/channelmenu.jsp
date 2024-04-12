@@ -102,7 +102,7 @@
                     int uid =1;
 
                     // Get list of channels from database
-                    ArrayList<Channels> channels = FirebaseConnect.getChannels(uid);
+                    ArrayList<Channel> channels = FirebaseConnect.getChannels(uid);
 
                     // Populate list of channels on menu
                     for (Channel channel : channels) {
