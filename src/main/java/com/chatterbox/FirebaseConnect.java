@@ -289,26 +289,24 @@ public class FirebaseConnect {
         return chats;
     }
 
-    public static ArrayList<User> getPotDmPartners(int uid) {            
+    public static ArrayList<Integer> getPotDmPartners(int uid) {            
         //returns a list of userIDs which whom the given userID does not yet have a DM chat
 
-        //Obtain a list of all User objects from database
-        ArrayList<User> allUsers = getAllUsers();
+        //Obtain a list of all User ids from database
+        ArrayList<Integer> allUsers = getChildren("User");
 
         //Obtain list of DM objects with dm chats that already exist for the given user
         ArrayList<Dm> existingDMs = getExistingDms(uid);
 
-        ArrayList<User> potPartners = new ArrayList<User>();
+        ArrayList<Integer> potPartners = new ArrayList<>();
 
-        //loop over list of all users, for each user compare userId to list of userIds in existingDMs list
-        for (User i: allUsers) {
-            int id = i.getUserID();
+        //loop over list of all user ids, for each user compare userId to list of userIds in existingDMs list
+        for (Integer i: allUsers) {
             boolean canAdd = true;
-
             for (Dm j: existingDMs){
                 int userA = j.getUserA();
                 int userB = j.getUserB();
-                if((userA == id) || (userB == id) || (uid == id)) {
+                if((userA == i) || (userB == i)) {
                      canAdd = false;
                 }
             }
@@ -317,35 +315,6 @@ public class FirebaseConnect {
             }
         }
         return potPartners;
-    }
-
-    public static ArrayList<User> getAllUsers(){                               
-        //function returns a list of all existing user objects in the database 
-
-        DatabaseReference ref = createEntityRef("User");
-
-        final ArrayList<User> users = new ArrayList<User>();
-        final CompletableFuture<Integer> future = new CompletableFuture<>();
-
-        //iterate through User objects, add all to list
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) { 
-                    User i = postSnapshot.getValue(User.class);
-                    i.setUserID(Integer.parseInt(dataSnapshot.getKey()));
-                    users.add(i);
-                }
-                future.complete(1);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                System.out.println("Error reading all User objects: " + databaseError.getMessage());
-            }
-        });
-        future.join();
-        return users;
     }
 
     public static User readUserSettings(String uid) {
