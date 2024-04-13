@@ -9,7 +9,6 @@
 
 <%! int uid; %>                            
 <% uid = (Integer)request.getSession().getAttribute("currentUser"); %>          <!-- get uid of current logged-in user -->
-<%! User potPartner; %>
 
 <!DOCTYPE html>
 <html>
@@ -92,10 +91,9 @@
             <ul id="users">                                         <!--load available users (not already in a chat with me) into list-->
                <%! ArrayList<Integer> pot = FirebaseConnect.getPotDmPartners(uid);%>
                <% if (!pot.isEmpty()) {
-                    for(Integer i: pot) { 
-                        potPartner = FirebaseConnect.readUser(i);%>
+                    for(Integer i: pot) { %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?otherUser="+ i%>><%= potPartner.getUName() %></a>    
+                            <a href=<%="./dmpagefront.jsp?otherUser="+ i%>><%= "User #" + i %></a>    
                         </li>
                     <% }
                 } else { %>
