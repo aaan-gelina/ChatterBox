@@ -30,7 +30,7 @@
             text-decoration: none;  
         }
 
-        #accountsettings, #logout {
+        #accountsettings, #logout, #adminsettings {
             display: block;
             margin: 20px auto;
             padding: 10px;
