@@ -122,7 +122,24 @@
         out.println("</div>");  
     }
     out.println("</div>");
+
+    out.println("<h2>Create a new channel.</h2>");
 %>
+
+<div>
+    <form action="home.jsp">
+      <label for="channelDescription">Channel Description</label>
+      <input type="text" id="channelDescription" name="channelDescription" >
+  
+      <label for="channelName">Channel Name</label>
+      <input type="text" id="channelName" name="lastname">
+
+      <label for="channelAdminId">Channel Admin Id</label>
+      <input type="text" id="channelAdminId" name="channelAdminId">
+    
+      <input type="submit" value="Create Channel">
+    </form>
+</div>
 
 
 <script>
