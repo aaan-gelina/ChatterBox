@@ -10,9 +10,7 @@
 <%!  int uid = 1; %>                                    <!-- TODO: dummy userID for testing of DM system, is supposed to be set during login -->
 <% session.setAttribute("currentUser", uid); %>
 <%! int otherUser; %> 
-<%! String dmKey; %>
-<%! User user; %>
-
+<% String dmKey; %>
 
 <!DOCTYPE html>
 <html>
@@ -111,10 +109,9 @@
                 <% if (!dms.isEmpty()) {
                     for(Dm i: dms) { 
                         otherUser = i.getOtherUser(uid);
-                        dmKey = i.getKey(); 
-                        user = FirebaseConnect.readUser(otherUser); %>
+                        dmKey = i.getKey(); %>
                         <li>
-                            <a href=<%="./dmpagefront.jsp?dmKey="+ dmKey%>><%= user.getUName() %></a> 
+                            <a href=<%="./dmpagefront.jsp?dmKey="+ dmKey%>><%= "User #" + otherUser +"  (dmKey: " + dmKey + " )"%></a> 
                         </li>
                     <% }
                 } else { %>
